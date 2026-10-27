@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light"><title>Six car journeys | Grade 10 Force & Motion</title>
+<style>
+:root{--ink:#123136;--teal:#155d58;--lime:#c9f47b;--muted:#5d7276;--line:#d8e7e2;--red:#c65252;--green:#278c64}*{box-sizing:border-box}body{margin:0;background:#eff5f2;color:var(--ink);font-family:Inter,Aptos,Arial,sans-serif;font-size:16px;line-height:1.5}header{background:#0f3036;color:white;padding:23px max(18px,calc((100vw - 1100px)/2));}header .minor{text-transform:uppercase;letter-spacing:.17em;font-size:11px;font-weight:800;color:var(--lime)}h1{font-size:clamp(25px,4vw,43px);margin:5px 0}header p{max-width:760px;margin:4px 0;color:#c0d8d4}.wrap{max-width:1100px;margin:20px auto 50px;padding:0 18px}h2{font-size:19px;margin:6px 0}.note{color:var(--muted);font-size:14px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 7px 25px #1231360c;margin:15px 0}.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.choice{border:1px solid #bdd6ce;border-radius:12px;min-height:65px;background:#f9fcfa;padding:12px;text-align:left;cursor:pointer;color:#16433f;font-size:13px;font-weight:800;transition:background .15s,border-color .15s}.choice small{display:block;color:#5f7a75;font-weight:500;margin-top:4px}.choice.active{border-color:#146d60;background:#e8f6ed;outline:2px solid #b1dcbb}.choice:hover{border-color:#288871}.scene-head{display:flex;align-items:center;justify-content:space-between;gap:14px}.signal{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:50px;background:#fceaea;color:#8f3333;font-size:12px;font-weight:900;white-space:nowrap}.signal:before{content:'';display:inline-block;background:#c94d4d;border-radius:50%;height:9px;width:9px}.signal.live{background:#e1f4e9;color:#1e654b}.signal.live:before{background:#2d9e69}.signal.done{background:#fceaea;color:#8f3333}.stage{border:6px solid #f7faf8;border-radius:17px;background:#f6dcdc;overflow:hidden;transition:background .08s} .stage.active{background:#dbf4e7}#car{transition:opacity .22s ease} .stage svg{display:block;width:100%;height:auto;max-height:310px}button{font-family:inherit}.controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:14px 0}.btn{border:0;border-radius:10px;padding:11px 18px;background:#0f5550;color:white;font-weight:850;cursor:pointer}.btn:hover{background:#0c7666}.btn.secondary{border:1px solid #b4d2ca;background:white;color:#205d56}.btn:disabled{opacity:.5;cursor:not-allowed}.elapsed{margin-left:auto;color:#4c6865;font-size:13px;font-variant-numeric:tabular-nums}.prompt{border-left:4px solid #8acb9f;background:#f2faf4;padding:11px 14px;border-radius:0 9px 9px 0;font-size:14px}.answer{border:1px solid #cae4d8;background:#f5fcf8;border-radius:12px;margin-top:12px;padding:15px;display:none}.answer.show{display:block}.answer h3{margin:0 0 8px;font-size:16px}.answer p{font-size:14px;margin:6px 0}.split{display:grid;grid-template-columns:1fr 1fr;gap:12px}.chip{border:1px solid #d4e4df;background:#f4f9f6;border-radius:15px;padding:14px}.chip strong{display:block;color:#14584d;font-size:14px}.chip p{font-size:13px;margin:5px 0 0;color:#536d6a}.footer{color:#70827f;font-size:11px;margin:25px 0}@media(max-width:700px){.choices{grid-template-columns:repeat(2,minmax(0,1fr))}.split{grid-template-columns:1fr}.panel{padding:14px}.elapsed{margin-left:0;width:100%}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><header><div class="minor">Grade 10 / MYP 5 · Lesson 1</div><h1>Six car journeys</h1><p>Observe first. Describe second. Reveal the scientific interpretation only after your discussion.</p></header><main class="wrap"><section class="panel"><h2>Choose a journey, then press GO</h2><p class="note">The road area is <strong>red</strong> outside the observation interval and <strong>green</strong> during it. Describe the car’s motion during the <strong>green</strong> interval. The <strong>START</strong> and <strong>FINISH</strong> lines mark the observed journey. Press GO to watch, or Replay to watch again.</p><div class="choices" id="choices" aria-label="Choose one of six car motion simulations"></div></section><section class="panel"><div class="scene-head"><h2 id="sceneTitle">A · Constant velocity</h2><span class="signal" id="signal">BEFORE START</span></div><div class="stage" id="stage"><svg id="scene" viewBox="0 0 900 300" role="img" aria-label="Top-down car simulation on a road, with a marked origin and start and finish positions"><defs><pattern id="checker" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#ffffff"/><rect width="8" height="8" fill="#263b3e"/><rect x="8" y="8" width="8" height="8" fill="#263b3e"/></pattern><filter id="shadow"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity=".22"/></filter></defs><g id="straightRoad"><rect x="0" y="53" width="900" height="197" rx="10" fill="#667983"/><path d="M0 57 H900 M0 246 H900" stroke="#d6e9dc" stroke-width="5"/><path d="M0 151 H900" stroke="#e7e9dd" stroke-width="4" stroke-dasharray="24 18"/><text x="830" y="38" text-anchor="end" font-size="18" fill="#2c5e56">positive →</text></g><g id="circleTrack" visibility="hidden"><circle cx="450" cy="140" r="90" fill="none" stroke="#667983" stroke-width="80"/><circle cx="450" cy="140" r="90" fill="none" stroke="#e7e9dd" stroke-width="4" stroke-dasharray="19 14"/><circle cx="450" cy="140" r="130" fill="none" stroke="#d6e9dc" stroke-width="4"/><circle cx="450" cy="140" r="50" fill="none" stroke="#d6e9dc" stroke-width="4"/></g><line id="zeroLine" x1="200" y1="54" x2="200" y2="250" stroke="#d8ffe0" stroke-width="3" stroke-dasharray="5 5"/><text id="zeroLabel" x="200" y="40" text-anchor="middle" font-size="18" fill="#205a50" font-weight="800">0 · START</text><rect id="finishLine" x="493" y="58" width="14" height="188" fill="url(#checker)" stroke="#213b39" stroke-width="1.3"/><text id="finishLabel" x="500" y="40" text-anchor="middle" font-size="18" fill="#205a50" font-weight="800">FINISH</text><circle id="startMark" cx="200" cy="151" r="9" fill="#f2e9b7" stroke="#164c46" stroke-width="3"/><path id="circleLabelGuide" d="M 503 34 L 470 34 L 459 46" fill="none" stroke="#205a50" stroke-width="2" visibility="hidden"/><text id="circleZeroLabel" x="598" y="28" text-anchor="middle" font-size="17" fill="#205a50" font-weight="800" visibility="hidden">0 · START</text><g id="car" filter="url(#shadow)"><rect x="-33" y="-19" width="66" height="38" rx="11" fill="#c9f47b" stroke="#416c45" stroke-width="2"/><rect x="-8" y="-15" width="22" height="30" rx="5" fill="#1c4c55"/><rect x="-23" y="-23" width="14" height="6" rx="2" fill="#28373b"/><rect x="15" y="-23" width="13" height="6" rx="2" fill="#28373b"/><rect x="-23" y="17" width="14" height="6" rx="2" fill="#28373b"/><rect x="15" y="17" width="13" height="6" rx="2" fill="#28373b"/><rect x="25" y="-13" width="4" height="8" fill="#fff8cb"/><rect x="25" y="5" width="4" height="8" fill="#fff8cb"/></g></svg></div><div class="controls"><button class="btn" id="go">▶ GO</button><button class="btn secondary" id="pause" disabled>Pause</button><button class="btn secondary" id="replay">↺ Replay</button><button class="btn secondary" id="reveal">Reveal interpretation</button><span class="elapsed" id="clock">Observation interval: 10 s</span></div><div class="prompt"><strong>Describe:</strong> At one instant, where is the car, and which way is it moving? Over the whole interval, what can you say about <strong>distance, displacement, speed, velocity, average speed, average velocity and acceleration</strong>? (Some quantities describe an instant; others describe an interval.)</div><div class="answer" id="answer" aria-live="polite"><h3>Discuss the physics</h3><p id="answerText"></p><p id="extraText"></p></div></section><section class="panel"><h2>Two important questions</h2><div class="split"><div class="chip"><strong>At an instant</strong><p>Where is the car? How fast is it moving? In which direction? Is its velocity changing at that instant?</p></div><div class="chip"><strong>Over an interval</strong><p>How far did it travel? How did its position change? What were its average speed and average velocity?</p></div></div><p class="note">Each green observation interval lasts 10 seconds.</p></section><p class="footer">Designed for Grade 10 / MYP 5 Force & Motion · Offline, single-file educational simulation · No personal data collected</p></main>
+<script>
+'use strict';
+const OBS_SECONDS = 10;
+const LEAD_SECONDS = 2;
+const FOLLOW_SECONDS = 2;
+// Model seconds and elapsed animation seconds run at the SAME RATE in all
+// three phases. There is no easing, reset or speed multiplier at a boundary.
+// x=0 is marked at the car's position when observation time t=0.
+const data = [
+  {id:'A',name:'Constant velocity',hint:'Straight road →',kind:'line',
+   f:t=>({x:200+30*t,y:151,angle:0}),
+   note:'The car travels to the right at constant speed and in a constant direction.',
+   extra:'Distance travelled equals the magnitude of displacement. Speed and velocity remain constant; acceleration is zero.'},
+  {id:'B',name:'Constant speed around a circle',hint:'A complete lap ↻',kind:'circle',
+   f:t=>{const a=-Math.PI/2+2*Math.PI*t/10;return {x:450+90*Math.cos(a),y:140+90*Math.sin(a),angle:(a+Math.PI/2)*180/Math.PI}},
+   note:'The car moves around the circle at a constant speed. Its direction changes continuously, so its velocity changes and it accelerates.',
+   extra:'Over the complete lap, the distance travelled is not zero, but displacement and average velocity are zero.'},
+  {id:'C',name:'Accelerates from rest',hint:'Speeds up →',kind:'line',startAtRest:true,
+   f:t=>({x:200+3*Math.max(0,t)**2,y:151,angle:0}),
+   note:'The car starts from rest and gains speed at a constant rate while travelling to the right.',
+   extra:'The car covers 300 model distance units in the observed interval. Its velocity increases continuously.'},
+  {id:'D',name:'Brakes to a stop',hint:'Slows down →',kind:'line',
+   f:t=>{const u=Math.min(t,10);return {x:200+60*u-3*u*u,y:151,angle:0}},
+   note:'The car travels to the right while slowing at a steady rate, coming to rest at the finish line.',
+   extra:'It covers the same 300 model distance units in the same 10 seconds as C, but starts fast and finishes at rest.'},
+  {id:'E',name:'Constant velocity left',hint:'Travels ←',kind:'line',
+   f:t=>({x:700-30*t,y:151,angle:180}),
+   note:'The car travels to the left at constant speed and in a constant direction.',
+   extra:'Taking right as positive, its velocity is negative. Speed and distance remain positive; displacement and average velocity point left. Acceleration is zero.'},
+  {id:'F',name:'Slows, reverses, returns',hint:'Out and back ↔',kind:'line',
+   f:t=>({x:200+60*t-6*t*t,y:151,angle:t<5?0:180}),
+   note:'The car moves right, slows, stops momentarily, reverses direction and returns to the start. Its acceleration points left throughout.',
+   extra:'Over the full interval, its displacement and average velocity are zero, while distance travelled and average speed are not.'}
+];
+const $ = id => document.getElementById(id);
+const car=$('car'),stage=$('stage'),circle=$('circleTrack'),straight=$('straightRoad');
+const mark=$('startMark'),zeroLine=$('zeroLine'),zeroLabel=$('zeroLabel'),circleZeroLabel=$('circleZeroLabel'),circleLabelGuide=$('circleLabelGuide'),finishLine=$('finishLine'),finishLabel=$('finishLabel');
+let current=0,phase='ready',progress=0,last=null,raf=null;
+const board=$('choices');
+data.forEach((d,i)=>{
+ const b=document.createElement('button');b.className='choice'+(i===0?' active':'');
+ b.innerHTML=`${d.id} · ${d.name}<small>${d.hint}</small>`;
+ b.onclick=()=>select(i);board.append(b);
+});
+function render(t){
+ const d=data[current],p=d.f(t);
+ car.style.opacity='1';
+ car.setAttribute('transform',`translate(${p.x} ${p.y}) rotate(${p.angle})`);
+}
+function indicator(text,state){
+ $('signal').className='signal'+(state==='live'?' live':state==='done'?' done':'');
+ $('signal').textContent=text;
+ stage.classList.toggle('active',state==='live');
+}
+function stopAnimation(){if(raf!==null)cancelAnimationFrame(raf);raf=null;last=null;}
+function select(i){
+ stopAnimation();current=i;phase='ready';progress=0;
+ board.querySelectorAll('button').forEach((b,j)=>b.classList.toggle('active',j===i));
+ const d=data[i],p0=d.f(0),pEnd=d.f(OBS_SECONDS),sameMark=Math.hypot(p0.x-pEnd.x,p0.y-pEnd.y)<2;
+ $('sceneTitle').textContent=`${d.id} · ${d.name}`;
+ circle.setAttribute('visibility',d.kind==='circle'?'visible':'hidden');
+ straight.setAttribute('visibility',d.kind==='circle'?'hidden':'visible');
+ zeroLine.setAttribute('visibility',d.kind==='circle'?'hidden':'visible');
+ zeroLabel.setAttribute('visibility',d.kind==='circle'?'hidden':'visible');
+ circleZeroLabel.setAttribute('visibility',d.kind==='circle'?'visible':'hidden');
+ circleLabelGuide.setAttribute('visibility',d.kind==='circle'?'visible':'hidden');
+ // The finish line is visible from the beginning. For a complete lap or an
+ // out-and-back trip, start and finish are the same physical place.
+ finishLine.setAttribute('x',pEnd.x-7);
+ finishLine.setAttribute('y',d.kind==='circle'?10:58);
+ finishLine.setAttribute('height',d.kind==='circle'?80:188);
+ finishLabel.setAttribute('x',pEnd.x);
+ finishLabel.setAttribute('visibility',sameMark?'hidden':'visible');
+ zeroLabel.textContent=sameMark?'0 · START / FINISH':'0 · START';
+ circleZeroLabel.textContent=sameMark?'0 · START / FINISH':'0 · START';
+ zeroLine.setAttribute('visibility',d.kind==='circle'||sameMark?'hidden':'visible');
+ mark.setAttribute('cx',p0.x);mark.setAttribute('cy',p0.y);
+ zeroLine.setAttribute('x1',p0.x);zeroLine.setAttribute('x2',p0.x);
+ zeroLabel.setAttribute('x',p0.x);
+ $('answer').classList.remove('show');$('pause').disabled=true;
+ $('pause').textContent='Pause';$('go').disabled=false;
+ $('clock').textContent='Observation interval: 10 s';
+ indicator('READY','ready');
+ render(d.startAtRest?0:-LEAD_SECONDS);
+}
+function updateFrame(){
+ const d=data[current],pre=d.startAtRest?0:LEAD_SECONDS;
+ // Single continuous time variable. t=0 is always the crossing of the
+ // zero marker (except C, which starts at rest on the marker).
+ const t=progress-pre;
+ render(t);
+ if(t<0){
+   indicator('BEFORE START','ready');
+   $('clock').textContent='Observation: 0.0 / 10.0 s';
+ }else if(t<OBS_SECONDS){
+   indicator('OBSERVING','live');
+   $('clock').textContent='Observation: '+t.toFixed(1)+' / 10.0 s';
+ }else{
+   indicator('AFTER FINISH','done');
+   $('clock').textContent='Observation: 10.0 / 10.0 s';
+ }
+ if(t>=OBS_SECONDS+FOLLOW_SECONDS){
+   phase='done';$('pause').disabled=true;$('go').disabled=false;
+   indicator('CLIP ENDED','done');
+   car.style.opacity='0'; // end the clip, rather than freeze a moving car
+   stopAnimation();return;
+ }
+}
+function tick(now){
+ if(last===null)last=now;
+ const dt=Math.min(.10,Math.max(0,(now-last)/1000));last=now;
+ progress+=dt;updateFrame();
+ if(phase==='running')raf=requestAnimationFrame(tick);
+}
+function go(){
+ if(phase==='paused'){
+   phase='running';last=null;$('pause').textContent='Pause';$('go').disabled=true;
+   raf=requestAnimationFrame(tick);return;
+ }
+ stopAnimation();progress=0;phase='running';
+ $('answer').classList.remove('show');
+ $('pause').disabled=false;$('pause').textContent='Pause';$('go').disabled=true;
+ updateFrame();raf=requestAnimationFrame(tick);
+}
+$('go').onclick=go;
+$('replay').onclick=go;
+$('pause').onclick=()=>{
+ if(phase==='running'){
+   stopAnimation();phase='paused';$('pause').textContent='Resume';$('go').disabled=false;
+ }else if(phase==='paused')go();
+};
+$('reveal').onclick=()=>{
+ const d=data[current];$('answerText').textContent=d.note;
+ $('extraText').textContent=d.extra;
+ $('answer').classList.toggle('show');
+};
+select(0);
+</script></body></html>
