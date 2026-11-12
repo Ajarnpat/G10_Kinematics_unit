@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Virtual toy-car lab · Grade 10 · Lesson 04</title>
+<style>
+:root{--bg:#eef4f5;--paper:#fff;--ink:#183e46;--muted:#587178;--line:#cfdee0;--teal:#157b76;--blue:#2d749c;--warm:#aa692c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,select,input{font:inherit}button{cursor:pointer}button:disabled,select:disabled,input:disabled{cursor:not-allowed;opacity:.42}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #6ab6bb;outline-offset:2px}
+.container{max-width:1500px;margin:0 auto;padding:15px 18px 20px}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:11px}
+.eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:var(--teal)}
+h1{font-size:clamp(23px,2.6vw,32px);letter-spacing:-.035em;line-height:1.05;margin:3px 0 0}
+h2{font-size:17px;margin:0 0 8px}h3{font-size:14px;margin:0 0 9px}
+.tag{font-size:12px;color:var(--muted);white-space:nowrap}
+.layout{display:grid;grid-template-columns:minmax(400px,.97fr) minmax(495px,1.03fr);align-items:start;gap:15px}
+.column{min-width:0}.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:17px;margin-bottom:12px;box-shadow:0 3px 11px rgba(16,55,64,.025)}
+.subtle{font-size:12px;color:var(--muted)}.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.trackbox{border:1px solid #d8e5e6;background:linear-gradient(135deg,#fafdff,#eff7f8);border-radius:10px;overflow:hidden;margin:12px 0 15px}
+#track{display:block;width:100%;height:auto}
+#track .m{stroke:#95b1b8;stroke-width:1.6}#track .m.selected{stroke:#d48b32;stroke-width:3.7}
+#track text{font:14px system-ui,sans-serif;fill:#47636b}#track text.selected{fill:#a15e24;font-weight:800}
+.trial-controls{display:grid;grid-template-columns:minmax(142px,1fr) minmax(110px,.8fr);gap:10px;align-items:end}
+label.control{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:5px}
+select{width:100%;height:41px;background:#fff;border:1px solid #aac4c8;border-radius:7px;padding:5px 10px;color:var(--ink)}
+.timer{display:flex;align-items:center;justify-content:center;gap:7px;background:#173b46;color:#fff;border-radius:8px;height:41px;padding:0 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.timer strong{font-size:23px;letter-spacing:.025em;font-weight:780}.timer span{font-size:11px;color:#c6dfe1}
+.action{margin-top:12px;display:grid;grid-template-columns:minmax(140px,1fr) 1fr 1fr;gap:9px}
+.btn{border:1px solid #b2c9cd;background:#fff;color:var(--ink);min-height:43px;border-radius:8px;font-size:13px;font-weight:750;padding:9px 12px}
+.btn:hover:not(:disabled){background:#eef7f6}.btn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}.btn.primary:hover:not(:disabled){background:#0c6560}
+.btn.stop{background:#ac473a;color:#fff;border-color:#ac473a}.btn.stop:hover:not(:disabled){background:#923c31}
+.btn.muted{color:#6c5860}.btn.sm{min-height:31px;font-size:12px;padding:5px 9px}
+.btn[hidden]{display:none}
+.help{font-size:13px;color:var(--muted);margin:9px 0 0;min-height:37px}
+.progress{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:8px 10px;border-radius:7px;background:#eff7f5;color:#22565a;font-size:13px}
+.trackfooter{margin-top:12px;border-top:1px solid #e0e9e9;padding-top:8px;font-size:12px;color:var(--muted)}
+details summary{cursor:pointer;color:#246b81;font-size:12px;font-weight:720}
+.anglecontrol{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:11px 0 4px;font-size:12px}
+.anglecontrol input{width:185px;accent-color:var(--teal)}
+.nowrap{white-space:nowrap} .rightcard{padding:14px 15px}.rightcard h2{margin:0 0 9px}
+.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;text-align:center;font-variant-numeric:tabular-nums;table-layout:fixed;min-width:465px}
+th,td{border:1px solid #d7e3e4;padding:8px 3px;font-size:12px}
+th{background:#e8f3f1;color:#3b6569;font-size:11px}th:first-child{width:17%}th:last-child{width:14%}
+td:first-child{background:#f5f9f8;font-weight:720}tr.active td{background:#fff5df}tr.active td:first-child{background:#fde6bc}td.mean{font-weight:770;color:#156e73}
+td .remove{border:0;padding:0;background:transparent;color:inherit;text-decoration:underline dotted;font-size:12px;min-width:24px;min-height:20px}td .remove:hover{text-decoration:underline solid}
+.graph-toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 8px}.graph-toolbar label{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted);margin-right:auto}.graph-toolbar input{accent-color:var(--teal)}
+.plotbox{border:1px solid #d9e5e7;border-radius:8px;background:#fcfefe;overflow:hidden}
+#plot{display:block;width:100%;height:auto;aspect-ratio:680/390}
+#plot text{font:13px system-ui,sans-serif;fill:#516e74}#plot .axis-label{font-weight:750;font-size:15px;fill:#244b54}
+.graphnote{font-size:12px;color:var(--muted);margin:8px 0 0;min-height:20px}
+.graphfoot{border-top:1px solid #e0eaea;margin-top:10px;padding-top:8px;display:flex;gap:9px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.legend{color:var(--muted);font-size:11px;display:flex;gap:10px;flex-wrap:wrap}
+.legend i{display:inline-block;width:11px;height:4px;vertical-align:middle;margin-right:3px}
+.footer{font-size:11px;color:#617981;margin:2px 3px}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.container{max-width:790px}.graphnote{min-height:0}}
+@media(max-width:480px){.container{padding:10px}.card{padding:12px}.rightcard{padding:12px}header{align-items:flex-start}.tag{display:none} .trial-controls{grid-template-columns:1fr 1fr}.action{grid-template-columns:1fr 1fr}#go{grid-column:1 / -1}#track text{font-size:12px} h1{font-size:25px}}
+
+/* Worksheet Q4: independently checked processing + velocity graph */
+.processed{margin-top:17px;border-top:4px solid #187c77}
+.process-head{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}
+.process-grid{display:grid;grid-template-columns:minmax(480px,1.04fr) minmax(390px,.96fr);gap:15px;align-items:start;margin-top:13px}
+.process-pane{min-width:0}
+.process-pane h3{font-size:15px;margin:0 0 6px}
+.process-formulas{background:#f1f8f7;border-left:3px solid #4caaa4;padding:10px 12px;font-size:13px;margin:10px 0;color:#265259}
+.process-table{table-layout:auto;min-width:600px}
+.process-table th{font-size:11px;line-height:1.28;padding:7px 5px}
+.process-table td{padding:6px 4px;min-height:44px}
+.process-table th:first-child{width:14%}.process-table th:last-child{width:21%}
+.process-table input{width:100%;min-width:55px;max-width:96px;background:white;border:1px solid #b7cdd0;border-radius:5px;padding:8px 4px;text-align:center;color:#183e46;font-size:13px;font-variant-numeric:tabular-nums}
+.process-table input.invalid{border-color:#be4b44;background:#fff0ef;box-shadow:inset 0 0 0 1px #be4b44}
+.process-table input.valid{border-color:#2e8e79;background:#f2fcf5}
+.process-table td.readonly{background:#f1f6f7;color:#284e57;font-weight:700}
+.check-cell{display:flex;flex-direction:column;align-items:stretch;gap:3px}.row-msg{font-size:11px;font-weight:650;min-height:14px;color:#637980;line-height:1.3}
+.row-msg.bad{color:#a43c34}.row-msg.good{color:#1b7664}
+.process-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
+.process-alert{font-size:12px;color:#59767a;margin-top:8px;min-height:20px}
+.process-alert.bad{color:#9d3f33}.process-alert.good{color:#20725d}
+#vplot{display:block;width:100%;height:auto;aspect-ratio:680/435}
+#vplot text{font:13px system-ui,sans-serif;fill:#516e74}#vplot .axis-label{font-weight:750;font-size:15px;fill:#244b54}
+#vplot .errorbars{stroke:#c07b34}
+.v-graph-note{margin:9px 0 0;font-size:12px;color:#547078}
+.vlegend{font-size:11px;color:#587178;display:flex;gap:12px;flex-wrap:wrap;margin-top:7px}
+.vlegend i{width:18px;height:3px;display:inline-block;vertical-align:middle;margin-right:4px}
+.method-details{margin:12px 0 0;border:1px solid #dfebeb;border-radius:8px;padding:10px 13px;background:#fbfdfd}
+.method-details summary{font-size:13px}
+.method-details p{font-size:12px;margin:9px 0}
+.calc-table{min-width:440px;margin-top:8px}.calc-table td,.calc-table th{padding:5px 8px}
+.criterion{background:#fff8ed;border-left:3px solid #d6a04e;padding:8px 12px;font-size:12px;margin-top:10px;color:#775025}
+@media(max-width:1120px){.process-grid{grid-template-columns:1fr}.processed{max-width:100%}}
+@media(max-width:480px){.process-grid{display:block}.process-pane{margin:0 0 14px}.process-pane .card{padding:12px}.process-table input{min-width:58px}}
+
+</style>
+</head>
+<body>
+<div class="container">
+ <header><div><div class="eyebrow">Grade 10 Science · Lesson 04</div><h1>Virtual toy-car lab</h1></div><span class="tag">Student practice · 5 trials per distance</span></header>
+ <div class="layout">
+  <section class="column" aria-label="Trolley simulation and stopwatch">
+   <div class="card">
+    <div class="bar"><h2>Run the trolley</h2><span class="subtle">Watch the <strong>front edge</strong>.</span></div>
+    <div class="trackbox"><svg id="track" viewBox="0 0 650 260" aria-label="A two-wheeled trolley moving down a shallow ramp from left to right. The ramp has distance markers 0.00 through 0.25 metres." role="img">
+      <defs><linearGradient id="rail" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#93aaad"/><stop offset="1" stop-color="#779195"/></linearGradient></defs>
+      <path d="M 8 128.38 L 623 186 L 623 200 L 8 142.38 Z" fill="url(#rail)" stroke="#69878c" stroke-width="1"/>
+      <path d="M 8 128.38 L 623 186" stroke="#4d7178" stroke-width="3.5" fill="none"/>
+      <path d="M 8 128.38 L 8 205 M 623 186 L 623 234" stroke="#b7c7c9" stroke-width="5"/>
+      <g id="markers"></g>
+      <g id="cart"><rect x="-43" y="-28" width="43" height="18" rx="3" fill="#eeb34b" stroke="#8b6929" stroke-width="2"/>
+       <rect x="-40" y="-26" width="34" height="5" fill="#fbe3aa" rx="2"/>
+       <circle cx="-34" cy="-7" r="7" fill="#294750"/><circle cx="-9" cy="-7" r="7" fill="#294750"/>
+       <circle cx="-34" cy="-7" r="2.5" fill="#b9cdd0"/><circle cx="-9" cy="-7" r="2.5" fill="#b9cdd0"/>
+       <line x1="0" y1="-30" x2="0" y2="-6" stroke="#ba5735" stroke-width="3"/>
+      </g>
+      <text x="69" y="241" text-anchor="start">Release</text><text x="619" y="255" text-anchor="end">Downhill →</text>
+    </svg></div>
+    <div class="trial-controls">
+      <div><label for="distance" class="control">Stop at</label><select id="distance"><option value="0.05">0.05 m (5 cm)</option><option value="0.10">0.10 m (10 cm)</option><option value="0.15">0.15 m (15 cm)</option><option value="0.20">0.20 m (20 cm)</option><option value="0.25">0.25 m (25 cm)</option></select></div>
+      <div><label class="control">Stopwatch</label><div class="timer"><strong id="watch">0.00</strong><span>s</span></div></div>
+    </div>
+    <div class="action"><button type="button" id="go" class="btn primary">Start</button><button type="button" id="accept" class="btn primary" disabled>Accept time</button><button type="button" id="reject" class="btn muted" disabled>Discard</button></div>
+    <div class="progress"><span id="progress">0 / 5 trials at 0.05 m</span><span id="state">Ready</span></div>
+    <p id="instruction" class="help" role="status" aria-live="polite">Press Start; press Stop when the front of the trolley reaches the highlighted marker.</p>
+    <div class="trackfooter"><details><summary>Optional ramp angle</summary><div class="anglecontrol"><label for="angle">Angle</label><input type="range" id="angle" min="1" max="5" step="0.05" value="2.55"><output id="angleValue" for="angle">2.55°</output><button type="button" class="btn sm" id="defaultAngle">Reset angle</button></div><span>Motion is calibrated to 0.20 m/s² at 2.55°. The drawing remains schematic; keep the same angle for one data set.</span></details></div>
+   </div>
+  </section>
+  <section class="column" aria-label="Results table and graph">
+   <div class="card rightcard">
+    <div class="bar"><h2>Trial times (s)</h2><span class="subtle">Automatically saved on Accept</span></div>
+    <div class="tablewrap"><table aria-label="Five trial times and mean for each distance"><thead><tr><th>Distance (m)</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>Mean</th></tr></thead><tbody id="tablebody"></tbody></table></div><div style="margin-top:12px"><button type="button" class="btn primary" id="toProcess" disabled>Export mean times to processed data table ↓</button><p class="subtle" style="margin:6px 0 0">Complete all five trials at each distance before exporting.</p></div>
+   </div>
+   <div class="card rightcard">
+    <div class="bar"><h2>Position–time graph</h2><span class="subtle">Mean of 5 trials per point</span></div>
+    <div class="graph-toolbar"><label><input id="bars" type="checkbox"> Show time ranges</label><button type="button" class="btn sm" id="fit" disabled>Draw best-fit curve</button></div>
+    <div class="plotbox"><svg id="plot" viewBox="0 0 680 390" role="img" aria-label="Graph of position in metres against elapsed time in seconds, with crosses for mean trial times and optional horizontal time-range bars and best-fit parabola"></svg></div>
+    <p class="graphnote" id="graphnote">Complete five trials at a distance to plot a point.</p>
+    <div class="graphfoot"><div class="legend"><span><i style="background:#167e78"></i>Mean</span><span><i style="background:#8caeb6"></i>Time range</span><span><i style="background:#2e76a8"></i>Fit</span><span><i style="background:#b96b2e"></i>Possible outlier</span></div>
+    <div><button type="button" id="export" class="btn sm">Save CSV</button> <button type="button" id="clear" class="btn sm muted">Clear</button></div></div>
+   </div>
+  </section>
+ </div>
+
+ <section class="card processed" id="question4" aria-labelledby="q4-title">
+  <div class="process-head">
+   <div><div class="eyebrow">Lesson 04 · Worksheet question 4</div><h2 id="q4-title" style="margin:5px 0">Calculate velocity from your position–time data</h2>
+   <p class="subtle" style="margin:4px 0">The exported <strong>mean start</strong> and <strong>mean end</strong> times are supplied. Calculate the remaining three columns yourself, and check each row.</p></div>
+   <span class="subtle">Five position intervals · 0.05 m each</span>
+  </div>
+  <div class="process-grid">
+   <div class="process-pane">
+    <div class="process-formulas"><strong>Use:</strong> Δt = t<sub>end</sub> − t<sub>start</sub><br>
+    t<sub>mid</sub> = (t<sub>start</sub> + t<sub>end</sub>) / 2<br>
+    v<sub>average</sub> = 0.05 m / Δt</div>
+    <div class="tablewrap"><table class="process-table" aria-label="Question four processing table with exported mean start and end times, and student entries for delta time, midpoint time, and interval average velocity">
+     <thead><tr><th>Position interval (m)</th><th>Mean start t (s)</th><th>Mean end t (s)</th><th>Δt (s)</th><th>Midpoint t (s)</th><th>Average v (m/s)</th><th>Check</th></tr></thead>
+     <tbody id="processRows"></tbody>
+    </table></div>
+    <p id="processMsg" class="process-alert" aria-live="polite">Collect your data and press “Export mean times to processed data table”.</p>
+    <div class="process-actions"><button type="button" id="plotVelocity" class="btn primary" disabled>Plot checked data + best-fit line</button><button type="button" id="resetProcessing" class="btn sm" disabled>Clear calculated answers</button></div>
+    <div class="criterion">This worksheet uses <strong>interval-average velocity</strong> at each <strong>midpoint time</strong>. It is an estimate of instantaneous velocity near that time for smoothly changing motion.</div>
+    <details id="uncertaintyDetails" class="method-details"><summary>Show how minimum and maximum velocity are determined</summary>
+    <p>For each 0.05 m interval, use the <strong>earliest and latest raw arrival times</strong> at its beginning and end. Since each position was measured in independent runs, this creates a <strong>conservative range</strong> rather than a statistical confidence interval.</p>
+    <p>Smallest possible interval time = earliest end arrival − latest start arrival → <strong>maximum velocity</strong>.<br>
+    Largest possible interval time = latest end arrival − earliest start arrival → <strong>minimum velocity</strong>.</p>
+    <p>v<sub>max</sub> = 0.05 / Δt<sub>min</sub>; v<sub>min</sub> = 0.05 / Δt<sub>max</sub>. If Δt<sub>min</sub> ≤ 0, no finite v<sub>max</sub> can be inferred from these ranges.</p>
+    <div class="tablewrap"><table class="calc-table"><thead><tr><th>Interval</th><th>Δt min (s)</th><th>Δt max (s)</th><th>v min (m/s)</th><th>v max (m/s)</th></tr></thead><tbody id="rangeRows"></tbody></table></div>
+    </details>
+   </div>
+   <div class="process-pane">
+    <h3>Velocity–time graph</h3>
+    <div class="graph-toolbar"><label><input id="velocityBars" type="checkbox" disabled> Add velocity error bars</label><button type="button" class="btn sm" id="originModel" disabled>Compare line forced through origin</button></div>
+    <div class="plotbox"><svg id="vplot" viewBox="0 0 680 435" role="img" aria-label="Velocity against midpoint time graph; checked interval averages, linear regression and optional asymmetric velocity ranges"></svg></div>
+    <div class="vlegend"><span><i style="background:#157b76"></i>Calculated interval velocity</span><span><i style="background:#2d749c"></i>Best-fit line</span><span><i style="background:#c07b34"></i>Velocity range</span><span><i style="background:#8d58ab"></i>Origin comparison (optional)</span></div>
+    <p id="vGraphNote" class="v-graph-note" aria-live="polite">The graph appears once you have checked and plotted at least two rows. All five points are recommended.</p>
+    <p class="subtle">A line close to the origin is expected for a release from rest. The fitted line is <strong>not forced</strong> through (0, 0), so students can evaluate whether their measurements agree.</p>
+   </div>
+  </div>
+ </section>
+
+ <p class="footer">Standalone trial version. Measured times are captured from the stopwatch, never replaced by predicted values. The clock and trolley are driven by the same elapsed-time reference. Raw trials are stored in this browser when browser storage is available; use Save CSV for a separate backup.</p>
+</div>
+<script>
+(()=>{'use strict';
+const distances=[0.05,0.10,0.15,0.20,0.25];
+const data=Object.fromEntries(distances.map(x=>[x.toFixed(2),[]]));
+const el=id=>document.getElementById(id),ns='http://www.w3.org/2000/svg';
+const distance=el('distance'),go=el('go'),accept=el('accept'),reject=el('reject'),watch=el('watch'),angle=el('angle'),table=el('tablebody'),plot=el('plot'),bars=el('bars'),fit=el('fit');
+let angleDeg=2.55,phase='ready',startStamp=0,stoppedSeconds=0,runFrame=0,showCurve=false,elapsedPaused=null;
+const storageKey='ISZL_L04_toy_car_lab_v6_raw';
+try{const stored=JSON.parse(localStorage.getItem(storageKey));if(stored&&stored.trials&&typeof stored.trials==='object'){
+ for(const d of distances){const a=stored.trials[key(d)];if(Array.isArray(a)&&a.length<=5&&a.every(n=>Number.isFinite(n)&&n>0))data[key(d)]=a.slice();}
+ if(Number.isFinite(stored.angle)&&stored.angle>=1&&stored.angle<=5){angleDeg=stored.angle;angle.value=''+stored.angle;el('angleValue').textContent=stored.angle.toFixed(2)+'°';}
+}}catch(_){/* Private browsing or local file permissions may prevent storage. */}
+function persistLab(){try{localStorage.setItem(storageKey,JSON.stringify({trials:data,angle:angleDeg}));}catch(_){}}
+
+const key=x=>Number(x).toFixed(2),chosen=()=>Number(distance.value),mean=vals=>vals.reduce((a,b)=>a+b,0)/vals.length;
+const acceleration=deg=>.20*Math.sin(deg*Math.PI/180)/Math.sin(2.55*Math.PI/180);
+const maxRun=.405; // hide once the front edge has run beyond the observation track
+const trackA={x:68,y:134},trackB={x:623,y:186};
+const slope=Math.atan2(trackB.y-trackA.y,trackB.x-trackA.x)*180/Math.PI;
+const trackPoint=x=>({x:trackA.x+(trackB.x-trackA.x)*(x/.40),y:trackA.y+(trackB.y-trackA.y)*(x/.40)});
+const allFilled=()=>distances.every(x=>data[key(x)].length===5),hasData=()=>distances.some(x=>data[key(x)].length>0);
+function svg(tag,attributes,parent){const node=document.createElementNS(ns,tag);Object.entries(attributes||{}).forEach(([k,v])=>node.setAttribute(k,''+v));if(parent)parent.appendChild(node);return node;}
+function text(parent,x,y,value,attrs={}){const node=svg('text',{x,y,...attrs},parent);node.textContent=value;return node;}
+function markerUpdate(){const target=chosen(),m=el('markers');m.replaceChildren();for(let i=0;i<=5;i++){
+ const x=i*.05,p=trackPoint(x),sel=Math.abs(x-target)<.001;
+ svg('line',{x1:p.x,y1:p.y-77,x2:p.x,y2:p.y-4,class:'m'+(sel?' selected':'')},m);
+ text(m,p.x,p.y-89,(i*5)+' cm',{class:sel?'selected':'','text-anchor':'middle'});
+}}
+function paintCar(x){const c=el('cart');if(x>maxRun){c.style.display='none';return}c.style.display='';const p=trackPoint(x);c.setAttribute('transform',`translate(${p.x.toFixed(3)} ${p.y.toFixed(3)}) rotate(${slope.toFixed(3)})`);}
+const elapsed=()=>Math.max(0,(performance.now()-startStamp)/1000);
+function animate(frameTime){if(phase!=='running'&&phase!=='stopped')return;
+ const t=Math.max(0,(frameTime-startStamp)/1000);
+ paintCar(.5*acceleration(angleDeg)*t*t);
+ if(phase==='running')watch.textContent=t.toFixed(2);
+ if(.5*acceleration(angleDeg)*t*t<=maxRun || phase==='running')runFrame=requestAnimationFrame(animate);
+ else runFrame=0;
+}
+function controls(){const run=phase==='running',stop=phase==='stopped',full=data[key(chosen())].length===5;
+ go.disabled=stop||(!run&&full);go.textContent=run?'Stop':'Start';go.className='btn '+(run?'stop':'primary');
+ accept.disabled=!stop;reject.disabled=!stop;distance.disabled=run||stop;
+ angle.disabled=run||stop||hasData();el('defaultAngle').disabled=angle.disabled;
+ el('progress').textContent=`${data[key(chosen())].length} / 5 trials at ${chosen().toFixed(2)} m`;
+ el('state').textContent=stop?'Time captured':run?'Running':full?'Complete':'Ready';
+}
+function say(message){el('instruction').textContent=message;}
+function start(){if(phase!=='ready'||data[key(chosen())].length===5)return;
+ cancelAnimationFrame(runFrame);startStamp=performance.now();stoppedSeconds=0;phase='running';
+ paintCar(0);watch.textContent='0.00';controls();say('Press Stop when the trolley’s front reaches the highlighted marker.');runFrame=requestAnimationFrame(animate);
+}
+function stop(){if(phase!=='running')return;
+ stoppedSeconds=elapsed();phase='stopped';watch.textContent=stoppedSeconds.toFixed(2);
+ paintCar(.5*acceleration(angleDeg)*stoppedSeconds*stoppedSeconds);controls();say('Accept this stopwatch reading, or discard this trial.');
+}
+function resetAfterResult(message){cancelAnimationFrame(runFrame);runFrame=0;phase='ready';stoppedSeconds=0;watch.textContent='0.00';paintCar(0);markerUpdate();refresh();say(message);}
+function save(){if(phase!=='stopped')return;const pos=chosen(),row=data[key(pos)];if(row.length>=5)return;
+ row.push(Number(stoppedSeconds.toFixed(2)));persistLab();let next=pos;
+ let msg=`Saved trial ${row.length} of 5 at ${pos.toFixed(2)} m.`;
+ if(row.length===5){msg=`Five trials complete at ${pos.toFixed(2)} m. The mean is now plotted.`;
+ const upcoming=distances.find(d=>data[key(d)].length<5);
+ if(upcoming!==undefined){next=upcoming;msg+=' Next distance selected.';}
+ else msg+=' All distances are complete.';
+ }
+ distance.value=key(next);resetAfterResult(msg);
+}
+function discardTrial(){if(phase!=='stopped')return;resetAfterResult('Trial discarded. Press Start to repeat.');}
+go.addEventListener('click',()=>phase==='running'?stop():start());accept.addEventListener('click',save);reject.addEventListener('click',discardTrial);
+distance.addEventListener('change',()=>{markerUpdate();refresh();say('Press Start. Stop the timer at the highlighted mark.');});
+angle.addEventListener('input',()=>{angleDeg=Number(angle.value);el('angleValue').textContent=angleDeg.toFixed(2)+'°';persistLab();});
+el('defaultAngle').addEventListener('click',()=>{angle.value='2.55';angle.dispatchEvent(new Event('input'));});
+document.addEventListener('keydown',e=>{if(e.code!=='Space'||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;
+ const node=e.target;if(['INPUT','SELECT','BUTTON','TEXTAREA','SUMMARY'].includes(node.tagName)||node.isContentEditable)return;
+ if(phase==='ready'||phase==='running'){e.preventDefault();phase==='running'?stop():start();}});
+function refresh(){table.innerHTML='<tr><td>0.00</td>'+Array.from({length:6},()=>'<td>0.00</td>').join('')+'</tr>'+
+ distances.map(d=>{const ar=data[key(d)],sel=chosen()===d;return `<tr class="${sel?'active':''}"><td>${d.toFixed(2)}</td>`+
+ Array.from({length:5},(_,i)=>`<td>${ar[i]===undefined?'–':`<button class="remove" data-distance="${key(d)}" data-index="${i}" title="Remove this trial" aria-label="Remove trial ${i+1} at ${d.toFixed(2)} metres">${ar[i].toFixed(2)}</button>`}</td>`).join('')+
+ `<td class="mean">${ar.length?mean(ar).toFixed(2):'–'}</td></tr>`;}).join('');
+ controls();redraw();updateExportButton();}
+table.addEventListener('click',e=>{const btn=e.target.closest('[data-distance]');if(!btn||phase!=='ready')return;
+ const d=Number(btn.dataset.distance),row=data[key(d)];row.splice(Number(btn.dataset.index),1);persistLab();distance.value=key(d);markerUpdate();refresh();say('Removed a recorded trial. Repeat this measurement to complete five trials.');});
+function points(){return distances.map(d=>({d,vals:data[key(d)]})).filter(p=>p.vals.length===5).map(p=>({y:p.d,x:mean(p.vals),low:Math.min(...p.vals),high:Math.max(...p.vals)}));}
+// Best-fit to x(position) = k × t², constrained to the physical origin.
+function coefficient(pts){let num=0,den=0;for(const p of pts){num+=p.y*p.x*p.x;den+=p.x**4;}return den>0?Math.max(0,num/den):null;}
+function redraw(){plot.replaceChildren();const pts=points();fit.disabled=pts.length<2;
+ if(pts.length<2)showCurve=false;fit.textContent=showCurve?'Hide best-fit curve':'Draw best-fit curve';
+ const left=68,right=648,top=22,bottom=326,w=right-left,h=bottom-top;
+ const maxTime=Math.max(.75,...pts.map(p=>p.high));
+ const xMax=Math.max(.75,Math.ceil((maxTime*1.13+.01)/.25)*.25);
+ const yMax=Math.max(.10,Math.ceil((Math.max(.05,...pts.map(p=>p.y))+.025)/.05)*.05);
+ const X=x=>left+w*x/xMax,Y=y=>bottom-h*y/yMax;
+ for(let i=0;i<=5;i++){const t=xMax*i/5;svg('line',{x1:X(t),y1:top,x2:X(t),y2:bottom,stroke:'#e1eced'},plot);text(plot,X(t),bottom+17,t.toFixed(2),{'text-anchor':'middle'});}
+ for(let y=0;y<yMax+.0001;y+=.05){const py=Y(y);svg('line',{x1:left,y1:py,x2:right,y2:py,stroke:'#e1eced'},plot);text(plot,left-10,py+4,y.toFixed(2),{'text-anchor':'end'});}
+ svg('path',{d:`M${left} ${top}V${bottom}H${right}`,stroke:'#65808a','stroke-width':2,fill:'none'},plot);
+ text(plot,(left+right)/2,380,'Mean elapsed time, t (s)',{class:'axis-label','text-anchor':'middle'});
+ const lab=text(plot,17,(top+bottom)/2,'Position, x (m)',{class:'axis-label','text-anchor':'middle'});lab.setAttribute('transform',`rotate(-90 17 ${(top+bottom)/2})`);
+ let c=null;if(showCurve&&pts.length>=2){c=coefficient(pts);if(c!==null){const end=Math.min(xMax,Math.sqrt(yMax/Math.max(c,1e-9)));let path='';for(let i=0;i<=160;i++){const x=end*i/160;path+=(i?' L ':'M ')+X(x).toFixed(2)+' '+Y(c*x*x).toFixed(2);}svg('path',{d:path,fill:'none',stroke:'#2e76a8','stroke-width':3.3,'stroke-linecap':'round'},plot);}}
+ let flagged=0;
+ for(const p of pts){const py=Y(p.y),px=X(p.x);
+ if(bars.checked){const xl=X(p.low),xr=X(p.high);svg('line',{x1:xl,y1:py,x2:xr,y2:py,stroke:'#8caeb6','stroke-width':2.7},plot);for(const edge of [xl,xr])svg('line',{x1:edge,y1:py-6,x2:edge,y2:py+6,stroke:'#8caeb6','stroke-width':2},plot);}
+ const outlier=c!==null&&bars.checked&&pts.length>=3&&(p.y<c*p.low*p.low || p.y>c*p.high*p.high);
+ if(outlier){flagged++;svg('circle',{cx:px,cy:py,r:12,fill:'none',stroke:'#b96b2e','stroke-width':2,'stroke-dasharray':'3 2'},plot);}
+ const color=outlier?'#b96b2e':'#157b76';for(const sign of [-1,1])svg('line',{x1:px-6,y1:py+6*sign,x2:px+6,y2:py-6*sign,stroke:color,'stroke-width':3,'stroke-linecap':'round'},plot);
+ }
+ if(!pts.length)text(plot,360,175,'Your first point appears after 5 trials.',{'text-anchor':'middle',fill:'#719099'});
+ el('graphnote').textContent=pts.length===0?'Complete five trials at a distance to plot a point.':
+ c!==null?`Best-fit parabola through the origin; ${pts.length} mean point${pts.length===1?'':'s'}. ${bars.checked?(flagged?`${flagged} possible outlier${flagged===1?'':'s'} highlighted.`:'All time ranges intersect the curve.'):'Enable time ranges to inspect possible outliers.'}`:
+ `${pts.length} of 5 mean points plotted. ${pts.length<2?'Complete another distance for a curve.':'Choose Draw best-fit curve to fit your measurements.'}`;
+}
+fit.addEventListener('click',()=>{if(points().length>=2){showCurve=!showCurve;redraw();}});
+bars.addEventListener('change',redraw);
+el('clear').addEventListener('click',()=>{if(!hasData())return;if(!window.confirm('Clear every saved measurement?'))return;
+ for(const d of distances)data[key(d)]=[];persistLab();distance.value='0.05';showCurve=false;phase='ready';watch.textContent='0.00';cancelAnimationFrame(runFrame);paintCar(0);markerUpdate();refresh();say('All measurements cleared.');});
+el('export').addEventListener('click',()=>{const lines=['Position x (m),Trial 1 (s),Trial 2 (s),Trial 3 (s),Trial 4 (s),Trial 5 (s),Mean t (s)','0.00,0,0,0,0,0,0'];for(const d of distances){const a=data[key(d)];lines.push([key(d),...Array.from({length:5},(_,i)=>a[i]===undefined?'':a[i].toFixed(2)),a.length?mean(a).toFixed(3):''].join(','));}
+ const u=URL.createObjectURL(new Blob([lines.join('\r\n')+'\r\n'],{type:'text/csv'}));const link=document.createElement('a');link.href=u;link.download='Lesson_04_toy_car_data.csv';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);
+});
+
+// Lesson 04 Worksheet Q4: transfer from raw data, row-by-row checking, velocity graph.
+const pr=el('processRows'),rr=el('rangeRows'),vplot=el('vplot'),vBars=el('velocityBars'),pbtn=el('plotVelocity'),importBtn=el('toProcess');
+const rawSnapshot=()=>JSON.stringify(distances.map(d=>[key(d),...data[key(d)]]));
+let exportedRaw=null,proc=null,drawV=false,showOrigin=false;
+function processIsCurrent(){return proc!==null && exportedRaw===rawSnapshot();}
+function updateExportButton(){if(!importBtn)return;importBtn.disabled=!allFilled()||phase!=='ready';
+ if(proc&&!processIsCurrent()){
+  exportedRaw=null;proc=null;drawV=false;showOrigin=false;vBars.checked=false;vBars.disabled=true;el('originModel').disabled=true;
+  renderProcessRows();drawVelocity();el('processMsg').textContent='Raw measurements changed. Export your mean times again before processing.';
+  el('processMsg').className='process-alert bad';
+ }}
+function exportMeans(){if(!allFilled()||phase!=='ready')return;
+ const means=[0,...distances.map(d=>mean(data[key(d)]))];
+ if(means.some((v,i)=>i>0&&!(v>means[i-1]))){const box=el('processMsg');box.textContent='Mean arrival times must increase with distance. Review your raw measurements before exporting.';box.className='process-alert bad';el('question4').scrollIntoView({behavior:'smooth',block:'start'});return;}
+ proc=distances.map((d,i)=>({d,start:means[i],end:means[i+1],entries:['','',''],verified:false}));
+ exportedRaw=rawSnapshot();drawV=false;showOrigin=false;vBars.checked=false;
+ el('processMsg').textContent='Mean start and end times transferred. Calculate Δt, midpoint time and average velocity. Check each row before plotting.';
+ el('processMsg').className='process-alert good';renderProcessRows();drawVelocity();el('question4').scrollIntoView({behavior:'smooth',block:'start'});
+}
+importBtn.addEventListener('click',exportMeans);
+const round=x=>Number(x).toFixed(3),number=x=>{if(typeof x!=='string'||!x.trim())return NaN;return Number(x.replace(',','.'));};
+function renderProcessRows(){if(!proc){pr.innerHTML=distances.map((d,i)=>`<tr><td>${(i*.05).toFixed(2)}–${d.toFixed(2)}</td><td class="readonly">–</td><td class="readonly">–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>`).join('');rr.innerHTML='<tr><td colspan="5">Export the raw mean times to calculate these ranges.</td></tr>';}
+ else {pr.innerHTML=proc.map((r,i)=>`<tr data-processed-row="${i}"><td>${(i*.05).toFixed(2)}–${r.d.toFixed(2)}</td><td class="readonly">${r.start.toFixed(3)}</td><td class="readonly">${r.end.toFixed(3)}</td>`+
+ [0,1,2].map((j)=>`<td><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" data-pr="${i}" data-field="${j}" aria-label="${['Delta time in seconds','Midpoint time in seconds','Average velocity in metres per second'][j]} for interval ${(i*.05).toFixed(2)} to ${r.d.toFixed(2)} metres" value="${r.entries[j]}"></td>`).join('')+
+ `<td><div class="check-cell"><button type="button" class="btn sm" data-check="${i}">Check row</button><span class="row-msg ${r.verified?'good':''}" data-check-msg="${i}" aria-live="polite">${r.verified?'✓ Correct':''}</span></div></td></tr>`).join('');
+ drawRangeTable();}
+ const n=proc?proc.filter(x=>x.verified).length:0;pbtn.disabled=n<2;el('resetProcessing').disabled=!proc;vBars.disabled=!drawV;el('originModel').disabled=!drawV;
+}
+function targetValues(r){const dt=r.end-r.start;return [dt,(r.end+r.start)/2,.05/dt];}
+function withinTolerance(actual,truth,j){const tol=j===2?Math.max(.005,Math.abs(truth)*.012):.0061;return Number.isFinite(actual)&&Math.abs(actual-truth)<=tol;}
+function checkRow(i){if(!processIsCurrent())return;const r=proc[i];const targets=targetValues(r);
+ const good=r.entries.map((v,j)=>withinTolerance(number(v),targets[j],j));r.verified=good.every(Boolean);
+ const tr=pr.querySelector(`[data-processed-row="${i}"]`);const msg=tr.querySelector('[data-check-msg]');tr.querySelectorAll('input').forEach((inp,j)=>{inp.classList.toggle('valid',good[j]);inp.classList.toggle('invalid',!good[j]);});
+ msg.textContent=r.verified?'✓ All three are correct.':`Check ${good.map((x,j)=>x?'':['Δt','midpoint t','average v'][j]).filter(Boolean).join(', ')}.`;
+ msg.className='row-msg '+(r.verified?'good':'bad');
+ const count=proc.filter(x=>x.verified).length;pbtn.disabled=count<2;
+ el('processMsg').textContent=`${count} of 5 rows verified. ${count>=2?'You can now plot the checked rows.':'Check at least two rows to graph.'}`;el('processMsg').className='process-alert';
+ if(drawV){drawVelocity();}
+}
+pr.addEventListener('input',ev=>{const inp=ev.target.closest('[data-pr]');if(!inp||!proc)return;
+ const i=Number(inp.dataset.pr),j=Number(inp.dataset.field);proc[i].entries[j]=inp.value;proc[i].verified=false;
+ inp.classList.remove('valid','invalid');const tr=inp.closest('tr');tr.querySelectorAll('input').forEach(x=>x.classList.remove('valid','invalid'));
+ const msg=tr.querySelector('[data-check-msg]');msg.textContent='Recheck this row';msg.className='row-msg';
+ pbtn.disabled=proc.filter(x=>x.verified).length<2;if(drawV)drawVelocity();});
+pr.addEventListener('click',ev=>{const btn=ev.target.closest('[data-check]');if(btn)checkRow(Number(btn.dataset.check));});
+el('resetProcessing').addEventListener('click',()=>{if(!proc)return;proc.forEach(r=>{r.entries=['','',''];r.verified=false;});drawV=false;showOrigin=false;vBars.checked=false;renderProcessRows();drawVelocity();el('processMsg').textContent='Calculated answers cleared. Your original raw measurements and exported mean times are unchanged.';});
+pbtn.addEventListener('click',()=>{if(!processIsCurrent()||proc.filter(r=>r.verified).length<2)return;drawV=true;renderProcessRows();drawVelocity();});
+vBars.addEventListener('change',drawVelocity);
+el('originModel').addEventListener('click',()=>{showOrigin=!showOrigin;el('originModel').textContent=showOrigin?'Hide origin-constrained line':'Compare line forced through origin';drawVelocity();});
+function calcRange(i){if(!proc)return null;const start=i===0?[0]:data[key(distances[i-1])],end=data[key(distances[i])];
+ if(!start.length||!end.length)return null;
+ const minDt=Math.min(...end)-Math.max(...start),maxDt=Math.max(...end)-Math.min(...start);
+ return {minDt,maxDt,vMin:maxDt>0?.05/maxDt:null,vMax:minDt>0?.05/minDt:null};
+}
+function drawRangeTable(){if(!proc)return;rr.innerHTML=proc.map((r,i)=>{const q=calcRange(i);return `<tr><td>${(i*.05).toFixed(2)}–${r.d.toFixed(2)}</td><td>${q.minDt.toFixed(3)}</td><td>${q.maxDt.toFixed(3)}</td><td>${q.vMin===null?'n/a':q.vMin.toFixed(3)}</td><td>${q.vMax===null?'Not bounded':q.vMax.toFixed(3)}</td></tr>`;}).join('');}
+function regression(pts,forceOrigin){let num=0,den=0;
+ if(forceOrigin){for(const p of pts){num+=p.x*p.y;den+=p.x*p.x;}return {a:den>0?num/den:0,b:0};}
+ const xm=mean(pts.map(p=>p.x)),ym=mean(pts.map(p=>p.y));
+ for(const p of pts){num+=(p.x-xm)*(p.y-ym);den+=(p.x-xm)**2;}
+ const a=den>0?num/den:0;return {a,b:ym-a*xm};
+}
+function drawVelocity(){vplot.replaceChildren();const pts=drawV&&processIsCurrent()?proc.filter(r=>r.verified).map(r=>{const i=proc.indexOf(r),q=calcRange(i);return {i,x:(r.start+r.end)/2,y:.05/(r.end-r.start),q};}):[];
+ const left=74,right=650,top=24,bottom=360,w=right-left,h=bottom-top;
+ const maxX=Math.max(1.5,...pts.map(p=>p.x))*1.12;
+ const xMax=Math.max(1,Math.ceil(maxX/.25)*.25);
+ const upper=Math.max(.15,...pts.map(p=>p.y),...(vBars.checked?pts.map(p=>p.q&&p.q.vMax||p.y):[]))*1.20;
+ const yMax=Math.max(.20,Math.ceil(upper/.05)*.05);
+ const X=x=>left+w*x/xMax,Y=y=>bottom-h*y/yMax;
+ for(let j=0;j<=5;j++){const t=xMax*j/5;svg('line',{x1:X(t),y1:top,x2:X(t),y2:bottom,stroke:'#e3edef'},vplot);text(vplot,X(t),bottom+19,t.toFixed(2),{'text-anchor':'middle'});}
+ for(let j=0;j<=5;j++){const v=yMax*j/5;svg('line',{x1:left,y1:Y(v),x2:right,y2:Y(v),stroke:'#e3edef'},vplot);text(vplot,left-10,Y(v)+4,v.toFixed(2),{'text-anchor':'end'});}
+ svg('path',{d:`M${left},${top}V${bottom}H${right}`,stroke:'#66818a','stroke-width':2,fill:'none'},vplot);
+ text(vplot,(left+right)/2,418,'Midpoint time, t (s)',{class:'axis-label','text-anchor':'middle'});
+ const ylab=text(vplot,19,(top+bottom)/2,'Average velocity, v (m/s)',{class:'axis-label','text-anchor':'middle'});ylab.setAttribute('transform',`rotate(-90 19 ${(top+bottom)/2})`);
+ let reg=null,crossing=0,count=0;
+ if(pts.length>=2){reg=regression(pts,false);
+  const drawLine=(model,color,dash)=>{let endX=xMax,startX=0;if(model.a>0&&model.b<0)startX=Math.max(0,-model.b/model.a);if(model.a>0&&model.b+model.a*xMax>yMax)endX=Math.min(xMax,(yMax-model.b)/model.a);
+   if(endX<startX)return;svg('line',{x1:X(startX),y1:Y(Math.max(0,model.a*startX+model.b)),x2:X(endX),y2:Y(Math.min(yMax,model.a*endX+model.b)),stroke:color,'stroke-width':3.2,'stroke-dasharray':dash||'none'},vplot);};
+  drawLine(reg,'#2d749c');if(showOrigin)drawLine(regression(pts,true),'#8d58ab','6 5');
+ }
+ for(const p of pts){const cx=X(p.x),cy=Y(p.y),q=p.q;
+  if(vBars.checked&&q&&q.vMin!==null&&q.vMax!==null){const y1=Y(q.vMin),y2=Y(q.vMax);svg('line',{x1:cx,y1:y1,x2:cx,y2:y2,stroke:'#c07b34','stroke-width':3.1},vplot);for(const yy of [y1,y2])svg('line',{x1:cx-7,y1:yy,x2:cx+7,y2:yy,stroke:'#c07b34','stroke-width':2.2},vplot);
+   count++;if(reg&&reg.a*p.x+reg.b>=q.vMin-1e-9&&reg.a*p.x+reg.b<=q.vMax+1e-9)crossing++;
+  }
+  svg('circle',{cx,cy,r:5.8,fill:'#157b76',stroke:'#fff','stroke-width':1.7},vplot);
+ }
+ if(!pts.length)text(vplot,(left+right)/2,175,'Check rows, then choose Plot checked data.',{'text-anchor':'middle'});
+ const msg=el('vGraphNote');if(!pts.length){msg.textContent='No velocity points plotted yet. Verify your calculations, then press the plot button.';}
+ else if(reg){const sign=reg.b>=0?'+':'−';msg.textContent=`${pts.length} checked point${pts.length===1?'':'s'} plotted. Best-fit v = ${reg.a.toFixed(3)} t ${sign} ${Math.abs(reg.b).toFixed(3)} (SI units). Slope ≈ ${reg.a.toFixed(3)} m/s²; velocity intercept ≈ ${reg.b.toFixed(3)} m/s.`+
+ (vBars.checked?` The line intersects ${crossing} of ${count} available vertical velocity ranges${count!==pts.length?'; some ranges cannot be bounded reliably':''}.`: ' Enable error bars to inspect the spread in velocity.');}
+ el('originModel').disabled=!drawV;el('originModel').textContent=showOrigin?'Hide origin-constrained line':'Compare line forced through origin';vBars.disabled=!drawV;
+}
+
+Object.defineProperty(window,'__toyCarModelCheck',{value:Object.freeze({accelerationAt:acceleration,theoreticalTime:(x,deg=2.55)=>Math.sqrt(2*x/acceleration(deg)),trackPoint}),enumerable:false});
+markerUpdate();paintCar(0);refresh();renderProcessRows();drawVelocity();
+})();
+</script>
+</body>
+</html>
