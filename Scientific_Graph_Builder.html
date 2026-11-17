@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scientific Graph Builder · ISZL Science</title>
+<style>
+:root{--ink:#172d41;--muted:#5e7182;--blue:#11698c;--teal:#167b7d;--gold:#e58c30;--pale:#eef5f8;--line:#d6e2e9;--paper:#fff;--bg:#f4f7fa;--bad:#a34433;--good:#26785e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.44 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
+button,input,select,textarea{font:inherit}button,select{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #70c2dc;outline-offset:2px}
+header{background:#132e43;color:white;padding:22px max(24px,calc((100vw - 1560px)/2));display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+header h1{margin:0;font-size:24px;letter-spacing:-.55px;line-height:1.25;font-weight:730}header p{margin:4px 0 0;color:#bed7e3;font-size:13px}.brand{display:flex;align-items:center;gap:14px}
+.logo{width:45px;height:45px;display:grid;place-items:center;border-radius:12px;background:#24516c;color:#d6f5ff;font-weight:750;font-size:20px}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}.headbtn{border:1px solid #49708a;background:transparent;color:white;padding:8px 13px;border-radius:9px;font-weight:620}.headbtn:hover{background:#264c66}
+main{max-width:1640px;margin:auto;padding:20px 23px 32px;display:grid;grid-template-columns:minmax(470px,540px) minmax(520px,1fr);gap:18px;align-items:start}
+.sidebar{display:flex;flex-direction:column;gap:14px;min-width:0}.panel{border:1px solid var(--line);border-radius:13px;background:var(--paper);box-shadow:0 2px 9px #203b5410;overflow:hidden}.panel-inner{padding:16px 17px 18px}.heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:11px}.heading h2{font-size:16px;letter-spacing:-.2px;margin:0}.step{font-size:11px;font-weight:800;color:#0e6483;background:#e7f4f9;border-radius:6px;padding:4px 8px;margin-right:7px}.subtle{color:var(--muted);font-size:12px}.hint{color:var(--muted);font-size:12px;margin:7px 0 0}
+button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;padding:7px 10px;font-weight:600;transition:background .13s}.btn:hover{background:#eaf3f7}.primary{background:#126988;border-color:#126988;color:white}.primary:hover{background:#0c536d}.danger{color:#963a2e;border-color:#e0c1ba}.danger:hover{background:#fff0eb}.mini{padding:5px 8px;font-size:12px}.btnrow{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.iconbtn{border:0;color:#9d493e;background:transparent;padding:4px 8px}.iconbtn:hover{background:#fdebe6}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:9px}table{border-collapse:collapse;width:100%;min-width:515px}th,td{border-bottom:1px solid #e7eef2;text-align:center;padding:6px 3px}th{background:#eff5f8;font-size:11px;font-weight:730;line-height:1.25;color:#355268;position:sticky;top:0}th:nth-child(2),th:nth-child(3),th:nth-child(4){background:#eaf5f7}th:nth-child(5),th:nth-child(6),th:nth-child(7){background:#f1f2fa}td:first-child{width:25px;font-size:12px;color:#6d8694}td:last-child{width:26px}td:nth-last-child(2){width:52px}td input[type="checkbox"]{width:16px;min-width:16px;height:16px;accent-color:#c03932;cursor:pointer}tr.outlier-row td{background:#fff0ed}tr.outlier-row td:first-child{color:#b1352c;font-weight:800}tr.selected-row td{box-shadow:inset 0 2px 0 #e5a04e,inset 0 -2px 0 #e5a04e}tr.selected-row td:first-child{box-shadow:inset 4px 0 0 #d27b26,inset 0 2px 0 #e5a04e,inset 0 -2px 0 #e5a04e}td input{width:100%;min-width:45px;max-width:81px;padding:6px 4px;border:1px solid #d4e0e8;border-radius:5px;text-align:center;font-variant-numeric:tabular-nums;color:#173d54}td input:not(:placeholder-shown){background:#fff}td input:focus{border-color:#177c9c;outline:2px solid #d0edf8}tr:last-child td{border-bottom:0}
+.data-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.inline-note{padding:8px 10px;border-radius:7px;font-size:12px;background:#f4f9fa;color:#456779;margin-top:9px}.notice{padding:8px 10px;border-radius:7px;font-size:12px;margin-top:8px;background:#fff3e9;color:#80461f;border:1px solid #f5dbc5}.notice:empty{display:none}.success{background:#ecf8f1;color:#266e4f;border:1px solid #c7ecd7}
+.pastebox{display:none;margin-top:10px}.pastebox.visible{display:block}.pastebox textarea{width:100%;height:112px;resize:vertical;border:1px solid #bcd0dc;border-radius:7px;padding:9px;font-size:12px;font-family:ui-monospace,Consolas,monospace}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}.field{display:flex;flex-direction:column;gap:4px;min-width:0}.field.full{grid-column:1/-1}.field label,.lab{font-size:12px;font-weight:670;color:#334e60}.field input,.field select,select.control,input.control{width:100%;background:#fff;border:1px solid #cbdbe4;border-radius:7px;padding:8px 9px;min-height:36px;color:#193449}.field input:disabled{background:#eff3f6;color:#99a7b0}.field small{color:#6b8291;font-size:11px}
+.toggle{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:560;cursor:pointer;color:#284b61}.toggle input{accent-color:#167591;width:16px;height:16px;margin:0}.axisbox{margin-top:12px;background:#f8fbfc;border:1px solid #e1edf2;padding:11px;border-radius:9px}.axishead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}.axishead b{font-size:13px}.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.four input{padding:7px 5px;min-width:0}.four .field label{font-size:11px}.grid-row{margin-top:11px;display:flex;flex-wrap:wrap;gap:12px}
+.checks{display:flex;flex-wrap:wrap;gap:8px 15px;margin-top:10px}.fit-controls{margin-top:10px;background:#f4f9fb;border-radius:8px;padding:10px;display:none}.fit-controls.visible{display:block}.fit-desc{font-size:12px;color:#5a7180;margin-top:7px}details{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}summary{font-weight:710;color:#31546a;cursor:pointer;user-select:none}.color-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:13px}.colorbox{display:flex;align-items:center;gap:7px;min-width:0}.colorbox input{width:31px;height:29px;padding:0;border:0;cursor:pointer;background:transparent}.colorbox label{font-size:11px;color:#416075}.slider-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:13px}.slider-row label{font-size:12px;color:#36536a}.slider-row input{width:100%;accent-color:#147799}.slider-row output{font-variant-numeric:tabular-nums}
+.preview-col{min-width:0;position:sticky;top:14px}.preview-panel{padding:16px 17px 15px}.graph-top{display:flex;justify-content:space-between;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:9px}.graph-top h2{font-size:16px;margin:0}.chip{font-size:11px;color:#2b6757;background:#e7f7ee;border-radius:30px;padding:4px 9px;font-weight:690}
+.graph-box{width:100%;background:#fff;border:1px solid #dfe7ed;border-radius:7px;overflow:hidden}.graph-box svg{width:100%;height:auto;display:block;user-select:none}.graph-box svg .drag-handle{cursor:ns-resize;touch-action:none}.graph-box svg .drag-handle:hover{filter:drop-shadow(0 0 3px #d8792f88)}.graph-box svg .data-point-target{cursor:pointer}.graph-box svg .data-point-target:hover .point-hit{stroke:#a33d2d;stroke-opacity:.65}.outlier-tip{background:#fff1ed;border:1px solid #ecc6bd;color:#904238;border-radius:7px;padding:8px 10px;font-size:12px;margin-top:9px}
+.fitinfo{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:10px;min-height:23px;color:#526a7b;font-size:12px}.fitinfo strong{color:#294b60}.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}
+.export-area{background:#f2f7fa;border:1px solid #e0eaf0;padding:12px;border-radius:9px;margin-top:13px}.export-area h3{font-size:13px;margin:0 0 9px}.export-area .btnrow button{flex:1;min-width:104px}.footerhint{margin-top:12px;color:#6c8292;font-size:11px}.graph-note{font-size:12px;color:#536d7e;margin-top:8px}#status{font-size:12px;margin-top:8px;color:#225d71;min-height:16px}
+@media(max-width:1200px){main{grid-template-columns:minmax(410px,500px) minmax(400px,1fr);padding:15px;gap:13px}.preview-panel{padding:13px}}
+@media(max-width:940px){main{grid-template-columns:1fr}.preview-col{position:static;order:-1}.sidebar{order:1}.panel-inner{padding:14px}.graph-box{max-width:1000px;margin:0 auto}}
+@media(max-width:520px){main{padding:9px;gap:10px}header{padding:16px 12px}header h1{font-size:20px}.fields{gap:8px}.four{grid-template-columns:repeat(2,1fr)}.color-grid{grid-template-columns:repeat(2,1fr)}.slider-row{grid-template-columns:1fr}}
+@media print{
+ @page{size:A4 portrait;margin:14mm}
+ body{background:white;margin:0;padding:0}header,.sidebar,.graph-top,.fitinfo,.export-area,.footerhint,.graph-note,#status{display:none!important}
+ main{display:block;width:100%;max-width:none;padding:0;margin:0}.preview-col,.preview-panel,.panel{position:static;margin:0;padding:0;border:0;box-shadow:none;overflow:visible}
+ .graph-box{border:0;border-radius:0;margin:10mm auto 0;max-width:100%;width:100%;page-break-inside:avoid}
+ .graph-box svg{width:100%;max-width:100%;height:auto}.graph-box svg .drag-handle{display:none}
+ .print-footer{display:block!important;color:#666;font-size:10pt;margin-top:9mm;text-align:center}
+}
+.print-footer{display:none}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">x·y</div><div><h1>Scientific Graph Builder</h1><p>Scientific graphs made clear · Version 4 · Works offline · ISZL Science</p></div></div>
+  <div class="header-actions"><button class="headbtn" id="exampleBtn">Load example</button><button class="headbtn" id="saveBtn">Save project</button><button class="headbtn" id="openBtn">Open project</button><input id="projectFile" type="file" accept=".json,application/json" hidden></div>
+</header>
+<main>
+ <div class="sidebar">
+  <section class="panel"><div class="panel-inner">
+   <div class="heading"><h2><span class="step">01</span>Experimental data</h2><span class="subtle" id="pointCount">5 points</span></div>
+   <div class="tablewrap"><table aria-label="Experimental measurements"><thead><tr><th>#</th><th>X<br>average</th><th>X<br>minimum</th><th>X<br>maximum</th><th>Y<br>average</th><th>Y<br>minimum</th><th>Y<br>maximum</th><th>Outlier?</th><th></th></tr></thead><tbody id="dataBody"></tbody></table></div>
+   <div class="inline-note"><strong>Paste from Excel:</strong> Copy one column of numbers in Excel, click the first destination cell below (such as X average or Y average), and press <strong>Ctrl+V</strong> (Windows) or <strong>⌘V</strong> (Mac). Repeat for other columns. Rows are added automatically. You can also paste a complete X–Y or six-column range into the first X average cell.</div>
+   <div class="data-actions"><button class="mini" id="addRow">+ Add row</button><button class="mini" id="pasteToggle">Bulk import table</button><button class="mini danger" id="clearRows">Clear data</button></div>
+   <div id="pastebox" class="pastebox"><label class="lab" for="pasteArea">Paste from Excel, Google Sheets, or a CSV table</label><textarea id="pasteArea" placeholder="X avg    X min    X max    Y avg    Y min    Y max\n0.5    0.4    0.6    1.1    1.0    1.2"></textarea><p class="hint">Use 2 columns (X average, Y average), or 6 columns (all six fields), separated by tabs, commas or semicolons. Existing rows will be replaced.</p><div class="btnrow" style="margin-top:8px"><button class="primary mini" id="pasteImport">Import data</button><button class="mini" id="pasteCancel">Cancel</button></div></div>
+   <div class="notice" id="dataNotice" role="status"></div>
+   <p class="hint">Only average X and average Y are required; min/max values are optional. For a new investigation, use <b>Clear data</b> before pasting. Click a plotted point to mark/unmark it as an outlier, or use the table checkbox. Outliers remain visible but are excluded from calculated fits.</p>
+  </div></section>
+  <section class="panel"><div class="panel-inner">
+   <div class="heading"><h2><span class="step">02</span>Graph and axes</h2></div>
+   <div class="fields">
+    <div class="field full"><label for="title">Graph title</label><input id="title" data-config="title" value="Extension of a spring against applied force"></div>
+    <div class="field"><label for="xName">X quantity / independent variable</label><input id="xName" data-config="xName" value="Applied force, F"></div>
+    <div class="field"><label for="xUnits">X units</label><input id="xUnits" data-config="xUnits" value="N"></div>
+    <div class="field"><label for="yName">Y quantity / dependent variable</label><input id="yName" data-config="yName" value="Extension, x"></div>
+    <div class="field"><label for="yUnits">Y units</label><input id="yUnits" data-config="yUnits" value="cm"></div>
+    <div class="field"><label for="xSymbol">X symbol in equation (optional)</label><input id="xSymbol" data-config="xSymbol" placeholder="Auto: F"></div>
+    <div class="field"><label for="ySymbol">Y symbol in equation (optional)</label><input id="ySymbol" data-config="ySymbol" placeholder="Auto: x"></div>
+   </div>
+   <p class="hint">Leave a symbol blank to use the part of the quantity name after the final comma (e.g., <b>Applied force, F</b> → <b>F</b>). Without a comma, the default is <b>x</b> or <b>y</b>. For scientific symbols, type <b>v_0</b>, <b>t^2</b>, <b>m s^{-2}</b>, <b>\Delta E_k</b>. Subscripts, superscripts and common Greek letters are rendered on the graph.</p>
+   <div class="axisbox"><div class="axishead"><b>X axis</b><label class="toggle"><input id="xAuto" data-config="xAuto" type="checkbox" checked>Automatic scale</label></div><div class="four">
+    <div class="field"><label for="xMin">Minimum</label><input id="xMin" data-config="xMin" inputmode="decimal" value="0"></div>
+    <div class="field"><label for="xMax">Maximum</label><input id="xMax" data-config="xMax" inputmode="decimal" value="6"></div>
+    <div class="field"><label for="xTick">Tick interval</label><input id="xTick" data-config="xTick" inputmode="decimal" value="1"></div>
+    <div class="field"><label for="xGrid">Grid interval</label><input id="xGrid" data-config="xGrid" inputmode="decimal" placeholder="Same as ticks"></div>
+   </div></div>
+   <div class="axisbox"><div class="axishead"><b>Y axis</b><label class="toggle"><input id="yAuto" data-config="yAuto" type="checkbox" checked>Automatic scale</label></div><div class="four">
+    <div class="field"><label for="yMin">Minimum</label><input id="yMin" data-config="yMin" inputmode="decimal" value="0"></div>
+    <div class="field"><label for="yMax">Maximum</label><input id="yMax" data-config="yMax" inputmode="decimal" value="7"></div>
+    <div class="field"><label for="yTick">Tick interval</label><input id="yTick" data-config="yTick" inputmode="decimal" value="1"></div>
+    <div class="field"><label for="yGrid">Grid interval</label><input id="yGrid" data-config="yGrid" inputmode="decimal" placeholder="Same as ticks"></div>
+   </div></div>
+   <div class="grid-row"><label class="toggle"><input type="checkbox" id="showGrid" data-config="showGrid" checked>Show gridlines</label><label class="toggle"><input type="checkbox" id="showBorder" data-config="showBorder" checked>Show top/right borders</label><label class="toggle"><input type="checkbox" id="showXError" data-config="showXError">Horizontal error bars</label><label class="toggle"><input type="checkbox" id="showYError" data-config="showYError" checked>Vertical error bars</label></div>
+  </div></section>
+  <section class="panel"><div class="panel-inner">
+   <div class="heading"><h2><span class="step">03</span>Best-fit line or curve</h2></div>
+   <div class="field"><label for="fitMode">Method</label><select id="fitMode" data-config="fitMode">
+     <option value="auto-line">Automatic · straight line</option><option value="auto-quadratic">Automatic · quadratic curve</option><option value="auto-cubic">Automatic · cubic curve</option><option value="manual-line">Manual · adjustable straight line</option><option value="manual-curve">Manual · adjustable smooth curve</option><option value="none">None · data points only</option>
+   </select></div>
+   <div id="manualControls" class="fit-controls"><div style="font-weight:720;color:#8a4c1e;font-size:13px">Drag the orange circular handles on the graph</div><p class="fit-desc">Manual straight line: 2 handles. Manual curve: 3 handles. Drag up or down to change the fit without moving your data points.</p><div class="btnrow" style="margin-top:9px"><button class="mini" id="resetHandles">Reset manual fit</button></div><div class="checks"><label class="toggle"><input id="showComparison" data-config="showComparison" type="checkbox">Show calculated fit for comparison</label></div></div>
+   <div class="axisbox extrap-controls" aria-labelledby="extrapHeading">
+     <div class="axishead"><b id="extrapHeading">Optional extrapolation</b><span class="subtle">Use X-axis values</span></div>
+     <div class="fields">
+       <div class="field"><label for="extrapolateBack">Backwards: extend to X =</label><input id="extrapolateBack" data-config="extrapolateBack" inputmode="decimal" type="text" placeholder="e.g. 0"></div>
+       <div class="field"><label for="extrapolateForward">Forwards: extend to X =</label><input id="extrapolateForward" data-config="extrapolateForward" inputmode="decimal" type="text" placeholder="e.g. 7"></div>
+     </div>
+     <p class="hint">Enter the <b>destination X value</b>, not the extra distance. For measurements from X = 1 to X = 5, enter 0 to extend backwards or 7 to extend forwards. Leave a field blank for no extension. Extrapolated portions are shown with <b>distinct dashed lines</b>.</p>
+     <div class="notice" id="extrapNotice" role="status"></div>
+   </div>
+   <div class="checks"><label class="toggle"><input type="checkbox" id="showEquation" data-config="showEquation" checked>Include equation on exported graph</label></div>
+   <p class="hint">Only exclude a measurement for a sound experimental reason, not simply to improve R². Mark a point as an outlier to exclude it from all automatic regressions, including comparisons; manually adjusted lines stay where you put them. Automatic fits use least-squares regression. The solid fitted section spans the included measurements; use the optional extrapolation inputs to extend beyond this range. <b>Especially for curved fits, extrapolated predictions may be unreliable.</b> A fitted curve is not simply a line joining the points.</p>
+   <details><summary>Appearance options</summary>
+    <div class="color-grid">
+     <div class="colorbox"><input type="color" id="pointColor" data-config="pointColor" value="#233e55"><label for="pointColor">Data points</label></div>
+     <div class="colorbox"><input type="color" id="fitColor" data-config="fitColor" value="#1773a1"><label for="fitColor">Best-fit line</label></div>
+     <div class="colorbox"><input type="color" id="compareColor" data-config="compareColor" value="#b18442"><label for="compareColor">Comparison</label></div>
+     <div class="colorbox"><input type="color" id="errorColor" data-config="errorColor" value="#a75f4b"><label for="errorColor">Error bars</label></div>
+     <div class="colorbox"><input type="color" id="gridColor" data-config="gridColor" value="#dbe2e8"><label for="gridColor">Gridlines</label></div>
+    </div>
+    <div class="slider-row"><label>Point size: <output id="pointSizeOut">5</output><input type="range" min="2" max="11" step="1" id="pointSize" data-config="pointSize" value="5"></label><label>Fit line width: <output id="lineWidthOut">3</output><input type="range" min="1" max="7" step=".5" id="lineWidth" data-config="lineWidth" value="3"></label></div>
+    <div class="fields" style="margin-top:9px"><div class="field"><label for="pointSymbol">Point symbol</label><select id="pointSymbol" data-config="pointSymbol"><option value="circle">Circle</option><option value="cross">Cross</option><option value="square">Square</option><option value="diamond">Diamond</option></select></div><div class="field"><label for="lineStyle">Fitted line style</label><select id="lineStyle" data-config="lineStyle"><option value="solid">Solid</option><option value="dashed">Dashed</option></select></div></div>
+   </details>
+  </div></section>
+ </div>
+ <div class="preview-col"><section class="panel preview-panel">
+  <div class="graph-top"><h2>Graph preview</h2><span class="chip">Live updates</span></div>
+  <div class="graph-box" id="graphBox"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 690" role="img" aria-label="Scientific graph preview"><text x="500" y="350" text-anchor="middle">Graph loading…</text></svg></div>
+  <div class="fitinfo" id="fitInfo"></div>
+  <p class="graph-note" id="manualNote">Click any plotted point to toggle its outlier status and highlight its table row. Outliers are still plotted, including error bars, but do not influence automatic regression.</p>
+  <div class="export-area"><h3>Download / print</h3><div class="btnrow"><button class="primary" id="pngBtn">PNG image</button><button id="svgBtn">SVG vector image</button><button id="pdfBtn">PDF · Print / Save</button></div><p class="hint">PNG is high-resolution; SVG remains sharp at any size. PDF opens your browser's print dialog: choose <b>Save as PDF</b>.</p></div>
+  <p class="footerhint">Tip: save a <b>project</b> to preserve all data and settings for another lesson. Images and PDFs are finished graph outputs, not editable graph projects.</p>
+  <div id="status" role="status" aria-live="polite"></div><div class="print-footer">Scientific Graph Builder · ISZL Science</div>
+ </section></div>
+</main>
+<script>
+'use strict';
+(() => {
+ const $ = id => document.getElementById(id);
+ const defaultConfig = {
+   title:'Extension of a spring against applied force', xName:'Applied force, F',xUnits:'N',xSymbol:'',yName:'Extension, x',yUnits:'cm',ySymbol:'',
+   xAuto:true,yAuto:true,xMin:'0',xMax:'6',xTick:'1',xGrid:'',yMin:'0',yMax:'7',yTick:'1',yGrid:'',
+   showGrid:true,showBorder:true,showXError:false,showYError:true,fitMode:'auto-line',showComparison:false,showEquation:true,extrapolateBack:'',extrapolateForward:'',
+   pointColor:'#233e55',fitColor:'#1773a1',compareColor:'#b18442',errorColor:'#a75f4b',gridColor:'#dbe2e8',pointSize:5,lineWidth:3,pointSymbol:'circle',lineStyle:'solid'
+ };
+ const exampleRows = [
+   {x:'1.0',xmin:'0.95',xmax:'1.05',y:'1.15',ymin:'1.03',ymax:'1.30'},
+   {x:'2.0',xmin:'1.95',xmax:'2.05',y:'2.22',ymin:'2.05',ymax:'2.39'},
+   {x:'3.0',xmin:'2.95',xmax:'3.05',y:'3.13',ymin:'2.94',ymax:'3.36'},
+   {x:'4.0',xmin:'3.95',xmax:'4.05',y:'4.27',ymin:'4.05',ymax:'4.49'},
+   {x:'5.0',xmin:'4.95',xmax:'5.05',y:'5.04',ymin:'4.82',ymax:'5.25'}
+ ];
+ let rows = []; let config={...defaultConfig};let nextId=1;let renderedAxes=null;let dragging=null;let selectedRowId=null;
+ let manual={line:[0.2,0.8],curve:[0.15,0.50,0.85]}; // vertical positions, as fraction of axis height from lower edge
+ const dims={W:1000,H:690,left:116,right:941,top:79,bottom:561};
+ const width=dims.right-dims.left,height=dims.bottom-dims.top;
+ const validModes=['auto-line','auto-quadratic','auto-cubic','manual-line','manual-curve','none'];
+ const cfgKeys=Object.keys(defaultConfig),numericCfg=['pointSize','lineWidth'],booleanCfg=['xAuto','yAuto','showGrid','showBorder','showXError','showYError','showComparison','showEquation'];
+ const fieldNames=['x','xmin','xmax','y','ymin','ymax'];
+ function rowObject(obj={}){let o={id:nextId++,outlier:obj.outlier===true};for(const k of fieldNames)o[k]=String(obj[k]??'');return o;}
+ function htmlEscape(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+ function num(v){const s=String(v??'').trim().replace(/,/g,'.').replace(/\s+/g,'');if(!s)return NaN;const n=Number(s);return Number.isFinite(n)?n:NaN;}
+ const ok=Number.isFinite;
+ function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+ function notify(msg,isError=false){$('status').textContent=msg;$('status').style.color=isError?'#a34433':'#225d71';}
+ function renderTable(){const body=$('dataBody');body.innerHTML='';
+  for(let i=0;i<rows.length;i++){
+   const r=rows[i],tr=document.createElement('tr');tr.dataset.rowId=r.id;
+   let cells='<td>'+String(i+1)+'</td>';
+   for(const k of fieldNames)cells+=`<td><input type="text" inputmode="decimal" aria-label="Row ${i+1} ${k}" data-id="${r.id}" data-field="${k}" value="${htmlEscape(r[k])}" placeholder="—"></td>`;
+   cells+=`<td><input type="checkbox" data-outlier="${r.id}" aria-label="Mark row ${i+1} as an outlier" title="Exclude row ${i+1} from automatic fit" ${r.outlier?'checked':''}></td>`;
+   cells+=`<td><button class="iconbtn" type="button" data-delete="${r.id}" aria-label="Remove row ${i+1}" title="Remove row">×</button></td>`;
+   tr.innerHTML=cells;body.appendChild(tr);
+  }
+  refreshRowHighlights();
+ }
+ function refreshRowHighlights(){for(const tr of $('dataBody').querySelectorAll('tr[data-row-id]')){
+   const r=rows.find(r=>r.id===Number(tr.dataset.rowId));
+   tr.classList.toggle('outlier-row',!!r?.outlier);
+   tr.classList.toggle('selected-row',r?.id===selectedRowId);
+   const cb=tr.querySelector('[data-outlier]');if(cb)cb.checked=!!r?.outlier;
+  }
+ }
+ function readPoints(){const points=[];let incomplete=0,bad=0,badRange=0;
+  for(const r of rows){const x=num(r.x),y=num(r.y);
+   if(!r.x.trim()&&!r.y.trim())continue;
+   if(!ok(x)||!ok(y)){incomplete++;continue;}
+   const p={id:r.id,rowIndex:rows.indexOf(r)+1,outlier:!!r.outlier,x,y};for(const k of ['xmin','xmax','ymin','ymax']){
+    const val=num(r[k]);p[k]=ok(val)?val:null;
+    if(String(r[k]).trim()&&!ok(val))bad++;
+   }
+   if(p.xmin!==null&&p.xmin>x){p.xmin=null;badRange++;}
+   if(p.xmax!==null&&p.xmax<x){p.xmax=null;badRange++;}
+   if(p.ymin!==null&&p.ymin>y){p.ymin=null;badRange++;}
+   if(p.ymax!==null&&p.ymax<y){p.ymax=null;badRange++;}
+   points.push(p);
+  }
+  return{points,incomplete,bad,badRange};
+ }
+ function niceStep(raw){if(!(raw>0)||!ok(raw))return 1;const exp=Math.floor(Math.log10(raw)),fraction=raw/10**exp;let m=1;if(fraction>1)m=2;if(fraction>2)m=2.5;if(fraction>2.5)m=5;if(fraction>5)m=10;return m*10**exp;}
+ function autoAxis(values){let lo=Math.min(...values),hi=Math.max(...values);
+  if(!ok(lo)||!ok(hi)){lo=0;hi=10;}
+  if(lo===hi){const wiggle=Math.max(Math.abs(lo)*.2,1);lo-=wiggle;hi+=wiggle;}
+  const span=hi-lo;lo-=span*.055;hi+=span*.055;
+  if(Math.min(...values)>=0&&Math.min(...values)<Math.max(...values)*.3)lo=0;
+  const step=niceStep((hi-lo)/7.5);
+  const min=+(Math.floor(lo/step+1e-10)*step).toPrecision(11),max=+(Math.ceil(hi/step-1e-10)*step).toPrecision(11);
+  return {min,max:max>min?max:min+step,tick:step,grid:step};
+ }
+ function configuredAxis(which,pts,extra=[]){const vals=[];for(const p of pts){vals.push(p[which]);if(config[which==='x'?'showXError':'showYError']){
+    if(p[which+'min']!==null)vals.push(p[which+'min']);if(p[which+'max']!==null)vals.push(p[which+'max']);
+   }}
+  for(const v of extra)if(ok(v))vals.push(v);
+  const fallback=autoAxis(vals.length?vals:[0,5]);
+  if(config[which+'Auto']){
+   const customGrid=num(config[which+'Grid']);if(ok(customGrid)&&customGrid>0)fallback.grid=customGrid;
+   return fallback;
+  }
+  const min=num(config[which+'Min']),max=num(config[which+'Max']),tick=num(config[which+'Tick']),customGrid=num(config[which+'Grid']);
+  if(!ok(min)||!ok(max)||max<=min||!ok(tick)||tick<=0)return null;
+  const grid=ok(customGrid)&&customGrid>0?customGrid:tick;
+  return{min,max,tick,grid};
+ }
+ function ticks(a,step,cap=140){if(!(step>0)||!(a.max>a.min))return[];
+  const first=Math.ceil(a.min/step-1e-9),last=Math.floor(a.max/step+1e-9);if(last-first>cap)return[];
+  const arr=[];for(let k=first;k<=last;k++)arr.push(+(k*step).toPrecision(12));return arr;
+ }
+ function formatTick(v){if(Math.abs(v)<1e-11)return'0';const a=Math.abs(v);if(a>=100000||a<.0001)return v.toExponential(2).replace(/e\+?/,'e');return String(+v.toPrecision(6));}
+ function fmt(v,sig=4){if(!ok(v))return'—';if(Math.abs(v)<1e-13)return'0';return String(+v.toPrecision(sig));}
+ function polyFit(points,degree){if(points.length<degree+1)return null;
+  let xs=points.map(p=>p.x),lo=Math.min(...xs),hi=Math.max(...xs),center=(lo+hi)/2,scale=(hi-lo)/2;if(!(scale>0))return null;
+  const n=degree+1,mat=Array.from({length:n},()=>Array(n+1).fill(0));
+  for(const p of points){const z=(p.x-center)/scale,power=[1];for(let k=1;k<=2*degree;k++)power[k]=power[k-1]*z;
+   for(let i=0;i<n;i++){for(let j=0;j<n;j++)mat[i][j]+=power[i+j];mat[i][n]+=p.y*power[i];}
+  }
+  for(let col=0;col<n;col++){
+   let pivot=col;for(let r=col+1;r<n;r++)if(Math.abs(mat[r][col])>Math.abs(mat[pivot][col]))pivot=r;
+   if(Math.abs(mat[pivot][col])<1e-11)return null;
+   [mat[pivot],mat[col]]=[mat[col],mat[pivot]];
+   const d=mat[col][col];for(let c=col;c<=n;c++)mat[col][c]/=d;
+   for(let r=0;r<n;r++)if(r!==col){let factor=mat[r][col];for(let c=col;c<=n;c++)mat[r][c]-=factor*mat[col][c];}
+  }
+  const co=mat.map(row=>row[n]);return buildModel(co,center,scale,points);
+ }
+ function buildModel(co,center,scale,points=[]){
+  const predict=x=>co.reduce((sum,c,i)=>sum+c*((x-center)/scale)**i,0);
+  const orig=Array(co.length).fill(0);
+  function choose(n,k){let v=1;for(let i=1;i<=k;i++)v=v*(n-i+1)/i;return v;}
+  for(let k=0;k<co.length;k++)for(let j=0;j<=k;j++)orig[j]+=co[k]*choose(k,j)*(-center)**(k-j)/scale**k;
+  let r2=null;if(points.length){const mean=points.reduce((s,p)=>s+p.y,0)/points.length;
+   const sst=points.reduce((s,p)=>s+(p.y-mean)**2,0),sse=points.reduce((s,p)=>s+(p.y-predict(p.x))**2,0);
+   r2=sst<1e-14?(sse<1e-14?1:0):1-sse/sst;
+  }
+  return{predict,coeff:orig,r2,degree:co.length-1};
+ }
+ function throughAnchors(anchors,points){const degree=anchors.length-1;
+  const center=(anchors[0].x+anchors[anchors.length-1].x)/2,scale=(anchors[anchors.length-1].x-anchors[0].x)/2;
+  if(!(scale>0))return null;const n=degree+1,mat=anchors.map(p=>{const z=(p.x-center)/scale;return [...Array.from({length:n},(_,k)=>z**k),p.y];});
+  for(let col=0;col<n;col++){let pivot=col;for(let row=col+1;row<n;row++)if(Math.abs(mat[row][col])>Math.abs(mat[pivot][col]))pivot=row;
+   if(Math.abs(mat[pivot][col])<1e-12)return null;[mat[col],mat[pivot]]=[mat[pivot],mat[col]];
+   const val=mat[col][col];for(let j=col;j<=n;j++)mat[col][j]/=val;
+   for(let row=0;row<n;row++)if(row!==col){const mul=mat[row][col];for(let j=col;j<=n;j++)mat[row][j]-=mul*mat[col][j];}
+  }
+  return buildModel(mat.map(row=>row[n]),center,scale,points);
+ }
+ const greek={Delta:'Δ',delta:'δ',mu:'μ',rho:'ρ',theta:'θ',alpha:'α',beta:'β',gamma:'γ',Omega:'Ω',omega:'ω',lambda:'λ',sigma:'σ',pi:'π',epsilon:'ε',tau:'τ',phi:'φ',times:'×',degree:'°',pm:'±',cdot:'·',mathrm:''};
+ // Render scientific text in SVG. Supported examples: v_0, v_{avg}, t^2, m s^{-2}, \\Delta E_k.
+ function parseMath(s){s=String(s??'');const tokens=[];let i=0;while(i<s.length){let mode='normal';if(s[i]==='_'||s[i]==='^'){mode=s[i]==='_'?'sub':'super';i++;}
+   let chunk='';if(s[i]==='{'){i++;let depth=1;while(i<s.length&&depth>0){const c=s[i++];if(c==='{')depth++;else if(c==='}'){depth--;if(depth===0)break;}chunk+=c;}}
+   else if(mode!=='normal'&&i<s.length&&s[i]==='\\'){let m=s.slice(i).match(/^\\[a-zA-Z]+/);if(m){chunk=m[0];i+=m[0].length;}else chunk=s[i++];}
+   else if(mode!=='normal'){chunk=s[i++]??'';}
+   else {while(i<s.length&&s[i]!=='_'&&s[i]!=='^'){chunk+=s[i++];}}
+   if(chunk)tokens.push({mode,text:chunk.replace(/\\([A-Za-z]+)/g,(_,k)=>Object.hasOwn(greek,k)?greek[k]:'\\'+k).replace(/\\ /g,' ')});
+  }
+  return tokens;
+ }
+ function tspans(s){const items=parseMath(s);let out='',last='normal';for(const t of items){let attrs='';if(t.mode==='sub'){attrs=' font-size="72%" baseline-shift="sub"';}if(t.mode==='super'){attrs=' font-size="72%" baseline-shift="super"';}
+  // baseline-shift should return to the parent's text baseline for each new span
+  out+=`<tspan${attrs}>${htmlEscape(t.text)}</tspan>`;last=t.mode;
+ }return out;
+ }
+ function pointShape(x,y,symbol,size,color){const common=`fill="${color}" stroke="white" stroke-width="1.6"`;
+  if(symbol==='square')return `<rect x="${x-size}" y="${y-size}" width="${2*size}" height="${2*size}" ${common}/>`;
+  if(symbol==='diamond')return `<path d="M ${x} ${y-size*1.3} L ${x+size*1.3} ${y} L ${x} ${y+size*1.3} L ${x-size*1.3} ${y} Z" ${common}/>`;
+  if(symbol==='cross')return `<path d="M ${x-size} ${y-size} L ${x+size} ${y+size} M ${x+size} ${y-size} L ${x-size} ${y+size}" fill="none" stroke="${color}" stroke-width="2.6" stroke-linecap="round"/>`;
+  return `<circle cx="${x}" cy="${y}" r="${size}" ${common}/>`;
+ }
+ function chosenSymbol(axis){
+  const direct=String(config[axis+'Symbol']||'').trim();if(direct)return direct;
+  const title=String(config[axis+'Name']||'');const comma=title.lastIndexOf(',');
+  const extracted=comma>=0?title.slice(comma+1).trim():'';
+  return extracted||axis;
+ }
+ function makeEquation(model){if(!model)return'';
+  const y=chosenSymbol('y'),x=chosenSymbol('x');let text=y+' = ',added=false;
+  for(let k=model.degree;k>=0;k--){const c=model.coeff[k];if(Math.abs(c)<1e-10)continue;
+   if(added)text+=c<0?' − ':' + ';else if(c<0)text+='−';
+   const abs=fmt(Math.abs(c),4);
+   const term=k===0?abs:((abs==='1'?'':abs+'·')+x+(k>=2?'^{'+k+'}':''));
+   text+=term;added=true;
+  }
+  if(!added)text+='0';return text;
+ }
+ function polyPath(model,x0,x1,project,steps=230){if(!model||!(x1>x0))return'';let p='';for(let i=0;i<=steps;i++){const x=x0+(x1-x0)*i/steps;const y=model.predict(x);if(!ok(y)||Math.abs(y)>1e15)continue;const pt=project(x,y);p+=(p?' L ':'M ')+pt.x.toFixed(3)+' '+pt.y.toFixed(3);}return p;}
+ function generateGraph(exporting=false){const data=readPoints(),pts=data.points,fitPts=pts.filter(p=>!p.outlier);const excluded=pts.length-fitPts.length;
+  const baseX=configuredAxis('x',pts),baseY=configuredAxis('y',pts);
+  if(!baseX||!baseY)return{html:emptyGraph('Check the manually specified axis limits and tick intervals.'),err:'Invalid axis limits or tick intervals.',data};
+  const minPointX=fitPts.length?Math.min(...fitPts.map(p=>p.x)):NaN;
+  const maxPointX=fitPts.length?Math.max(...fitPts.map(p=>p.x)):NaN;
+  const extrapWarnings=[];
+  const mode=config.fitMode,manualMode=mode.startsWith('manual-');
+  if(mode==='none'&&(String(config.extrapolateBack).trim()||String(config.extrapolateForward).trim()))extrapWarnings.push('Choose a line or curve fit to enable extrapolation.');
+  function parseExtension(which){const raw=String(config[which]??'').trim();if(!raw)return null;
+   const v=num(raw),left=which==='extrapolateBack';
+   if(!ok(v)){extrapWarnings.push((left?'Backwards':'Forwards')+' X value must be a number.');return null;}
+   if(fitPts.length<2){extrapWarnings.push('At least two included measurements are needed before extrapolating.');return null;}
+   if(left&&v>=minPointX){extrapWarnings.push('Backwards X must be smaller than the smallest included X ('+fmt(minPointX)+').');return null;}
+   if(!left&&v<=maxPointX){extrapWarnings.push('Forwards X must be greater than the largest included X ('+fmt(maxPointX)+').');return null;}
+   return v;
+  }
+  const extendBack=mode==='none'?null:parseExtension('extrapolateBack'),extendForward=mode==='none'?null:parseExtension('extrapolateForward');
+  const targets=[extendBack,extendForward].filter(ok);
+  const aX=configuredAxis('x',pts,targets);
+  let aY=baseY;
+  if(!config.xAuto){for(const v of targets)if(v<aX.min||v>aX.max){extrapWarnings.push('Extrapolation outside the X axis is clipped; widen the manual X limits to show it.');break;}}
+  let models={primary:null,comparison:null},anchors=[];
+  if(mode==='auto-line')models.primary=polyFit(fitPts,1);
+  if(mode==='auto-quadratic')models.primary=polyFit(fitPts,2);
+  if(mode==='auto-cubic')models.primary=polyFit(fitPts,3);
+  if(manualMode){const yy=mode==='manual-line'?manual.line:manual.curve;const us=mode==='manual-line'?[.15,.85]:[.10,.50,.90];
+   // Keep manually adjusted handles anchored to the pre-extrapolation scales.
+   // Extending an axis must never silently alter the physical fitted model.
+   anchors=us.map((u,i)=>({x:baseX.min+(baseX.max-baseX.min)*u,y:baseY.min+(baseY.max-baseY.min)*yy[i]}));
+   models.primary=throughAnchors(anchors,fitPts);
+   if(config.showComparison)models.comparison=polyFit(fitPts,mode==='manual-line'?1:2);
+  }
+  if(targets.length&&models.primary&&config.yAuto&&!manualMode){
+   // Include extrapolated model values in the automatic Y scale, including curve turning points.
+   const left=extendBack??minPointX,right=extendForward??maxPointX,extraY=[];
+   if(right>left){for(let i=0;i<=160;i++){
+     const v=models.primary.predict(left+(right-left)*i/160);if(ok(v)&&Math.abs(v)<1e100)extraY.push(v);
+   }}
+   if(extraY.length)aY=configuredAxis('y',pts,extraY);
+  }
+  if((aX.max-aX.min)/aX.tick>150||(aY.max-aY.min)/aY.tick>150)return{html:emptyGraph('Tick spacing is too small for the selected axis range.'),err:'Too many ticks. Increase the tick interval.',data};
+  if(config.showGrid&&((aX.max-aX.min)/aX.grid>150||(aY.max-aY.min)/aY.grid>150))return{html:emptyGraph('Grid spacing is too small for the selected axis range.'),err:'Too many gridlines. Increase the grid interval.',data};
+  renderedAxes={aX,aY};
+  const project=(x,y)=>({x:dims.left+(x-aX.min)/(aX.max-aX.min)*width,y:dims.bottom-(y-aY.min)/(aY.max-aY.min)*height});
+  const pathId='graph-plot-clip';
+  let svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${dims.W} ${dims.H}" role="img" aria-label="${htmlEscape(config.title||'Scientific graph')}" style="background:#fff;font-family:Arial,Helvetica,sans-serif"><rect width="1000" height="690" fill="white"/><defs><clipPath id="${pathId}"><rect x="${dims.left}" y="${dims.top}" width="${width}" height="${height}"/></clipPath></defs>`;
+  svg+=`<text x="500" y="42" text-anchor="middle" font-weight="bold" font-size="23" fill="#20272c">${tspans(config.title)}</text>`;
+  if(config.showGrid){const gx=ticks(aX,aX.grid),gy=ticks(aY,aY.grid);
+   for(const val of gx){const xx=project(val,0).x;svg+=`<line x1="${xx}" y1="${dims.top}" x2="${xx}" y2="${dims.bottom}" stroke="${config.gridColor}" stroke-width="1.25"/>`;}
+   for(const val of gy){const yy=project(0,val).y;svg+=`<line x1="${dims.left}" y1="${yy}" x2="${dims.right}" y2="${yy}" stroke="${config.gridColor}" stroke-width="1.25"/>`;}
+  }
+  if(config.showBorder)svg+=`<rect x="${dims.left}" y="${dims.top}" width="${width}" height="${height}" stroke="#34434d" stroke-width="1.6" fill="none"/>`;
+  else svg+=`<path d="M ${dims.left} ${dims.top} V ${dims.bottom} H ${dims.right}" fill="none" stroke="#34434d" stroke-width="1.8"/>`;
+  for(const v of ticks(aX,aX.tick)){let xx=project(v,0).x;svg+=`<line x1="${xx}" y1="${dims.bottom}" x2="${xx}" y2="${dims.bottom+8}" stroke="#24333d" stroke-width="1.5"/><text x="${xx}" y="${dims.bottom+29}" font-size="17" text-anchor="middle" fill="#303e49">${htmlEscape(formatTick(v))}</text>`;}
+  for(const v of ticks(aY,aY.tick)){let yy=project(0,v).y;svg+=`<line x1="${dims.left-8}" y1="${yy}" x2="${dims.left}" y2="${yy}" stroke="#24333d" stroke-width="1.5"/><text x="${dims.left-15}" y="${yy+5.5}" font-size="17" text-anchor="end" fill="#303e49">${htmlEscape(formatTick(v))}</text>`;}
+  const xLabel=[config.xName,config.xUnits?' / '+config.xUnits:''].join('');const yLabel=[config.yName,config.yUnits?' / '+config.yUnits:''].join('');
+  svg+=`<text x="${(dims.left+dims.right)/2}" y="638" text-anchor="middle" font-size="21" font-weight="600" fill="#263d4c">${tspans(xLabel)}</text>`;
+  svg+=`<text x="31" y="${(dims.top+dims.bottom)/2}" text-anchor="middle" transform="rotate(-90 31 ${(dims.top+dims.bottom)/2})" font-size="21" font-weight="600" fill="#263d4c">${tspans(yLabel)}</text>`;
+  const hasExtension=!!(models.primary&&(extendBack!==null||extendForward!==null));
+  if(hasExtension)svg+=`<text x="${dims.right}" y="65" text-anchor="end" fill="#547282" font-size="14" font-style="italic">Dashed beyond measurements = extrapolation</text>`;
+  svg+=`<g clip-path="url(#${pathId})">`;
+  function fitPaths(model,color,comparison=false){if(!model||!fitPts.length||!(maxPointX>minPointX))return '';
+   let paths='',strokeWidth=config.lineWidth;
+   const main=polyPath(model,minPointX,maxPointX,project,model.degree===1?2:230);
+   const middleDash=comparison?'stroke-dasharray="12 8"':config.lineStyle==='dashed'?'stroke-dasharray="11 8"':'';
+   paths+=`<path data-fit-part="measured" d="${main}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" ${middleDash} stroke-linejoin="round" stroke-linecap="round"/>`;
+   for(const [dir,target,edge] of [['backwards',extendBack,minPointX],['forwards',extendForward,maxPointX]]){
+    if(target===null)continue;
+    const start=Math.min(target,edge),end=Math.max(target,edge);
+    const path=polyPath(model,start,end,project,model.degree===1?2:200);
+    // For an already dashed fit, use dotted extrapolation to distinguish segments.
+    const dash=comparison||config.lineStyle==='dashed'?'3 9':'11 7';
+    paths+=`<path data-extrapolate="${dir}" d="${path}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" stroke-dasharray="${dash}" opacity="0.84" stroke-linejoin="round" stroke-linecap="round"/>`;
+   }
+   return paths;
+  }
+  svg+=fitPaths(models.comparison,config.compareColor,true);
+  svg+=fitPaths(models.primary,config.fitColor);
+  for(const p of pts){const pt=project(p.x,p.y),err=config.errorColor;
+   if(config.showXError&&(p.xmin!==null||p.xmax!==null)){
+    let low=project(p.xmin??p.x,p.y),high=project(p.xmax??p.x,p.y);svg+=`<g stroke="${err}" stroke-width="2" stroke-linecap="round"><line x1="${low.x}" y1="${pt.y}" x2="${high.x}" y2="${pt.y}"/><line x1="${low.x}" y1="${pt.y-6}" x2="${low.x}" y2="${pt.y+6}"/><line x1="${high.x}" y1="${pt.y-6}" x2="${high.x}" y2="${pt.y+6}"/></g>`;
+   }
+   if(config.showYError&&(p.ymin!==null||p.ymax!==null)){
+    let low=project(p.x,p.ymin??p.y),high=project(p.x,p.ymax??p.y);svg+=`<g stroke="${err}" stroke-width="2" stroke-linecap="round"><line x1="${pt.x}" y1="${low.y}" x2="${pt.x}" y2="${high.y}"/><line x1="${pt.x-6}" y1="${low.y}" x2="${pt.x+6}" y2="${low.y}"/><line x1="${pt.x-6}" y1="${high.y}" x2="${pt.x+6}" y2="${high.y}"/></g>`;
+   }
+   svg+=pointShape(pt.x,pt.y,config.pointSymbol,+config.pointSize,config.pointColor);
+   if(p.outlier){const radius=+config.pointSize+9;
+    svg+=`<circle cx="${pt.x}" cy="${pt.y}" r="${radius}" fill="none" stroke="#c53431" stroke-width="3"/>`;
+    const lx=clamp(pt.x+radius+8,dims.left+5,dims.right-65),ly=clamp(pt.y-radius-9,dims.top+17,dims.bottom-10);
+    svg+=`<text x="${lx}" y="${ly}" font-weight="bold" font-size="16" fill="#b8322c" paint-order="stroke" stroke="white" stroke-width="3" stroke-linejoin="round">Outlier</text>`;
+   }
+   if(!exporting){svg+=`<g class="data-point-target" data-point-id="${p.id}"><circle class="point-hit" cx="${pt.x}" cy="${pt.y}" r="${Math.max(15,+config.pointSize+10)}" fill="transparent" stroke="#a33d2d" stroke-width="2" stroke-opacity="0"/><title>Row ${p.rowIndex}: (${fmt(p.x)}, ${fmt(p.y)}). Click to ${p.outlier?'include':'exclude'} in automatic fit.</title></g>`;}
+  }
+  svg+='</g>';
+  if(manualMode&&!exporting){for(let i=0;i<anchors.length;i++){let p=project(anchors[i].x,anchors[i].y);
+   svg+=`<line x1="${p.x}" y1="${dims.top}" x2="${p.x}" y2="${dims.bottom}" stroke="#e19a4c" stroke-opacity=".33" stroke-width="1.4" stroke-dasharray="6 7"/>`;
+   svg+=`<circle class="drag-handle" data-handle="${i}" cx="${p.x}" cy="${p.y}" r="12" fill="#e48b2e" stroke="white" stroke-width="3"/>`;
+   svg+=`<circle cx="${p.x}" cy="${p.y}" r="3" fill="#fff" pointer-events="none"/>`;
+  }}
+  if(models.primary&&config.showEquation){let eq=makeEquation(models.primary);const maxChars=85;if(eq.length>maxChars)eq=eq.slice(0,maxChars-1)+'…';
+   svg+=`<text x="500" y="675" text-anchor="middle" font-size="15" fill="#375a6b">${htmlEscape((manualMode?'Manual: ':'Fit: '))}${tspans(eq)}${!manualMode&&models.primary.r2!==null?'   |   R² = '+htmlEscape(fmt(models.primary.r2,5)):''}</text>`;
+  }
+  svg+='</svg>';
+  return {html:svg,data,models,aX,aY,manualMode,excluded,included:fitPts.length,extrapWarnings,extendBack,extendForward,hasExtension};
+ }
+ function emptyGraph(msg){return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 690" style="background:#fff;font-family:Arial,sans-serif"><rect width="1000" height="690" fill="#fff"/><text x="500" y="346" fill="#ad5940" text-anchor="middle" font-size="23">${htmlEscape(msg)}</text></svg>`;}
+ function render(){const g=generateGraph(false);$('graphBox').innerHTML=g.html;
+  const warnings=[];if(g.data.incomplete)warnings.push(`${g.data.incomplete} incomplete or non-numeric row(s) skipped`);
+  if(g.data.bad)warnings.push(`${g.data.bad} invalid minimum/maximum value(s) ignored`);
+  if(g.data.badRange)warnings.push(`${g.data.badRange} minimum/maximum value(s) were on the wrong side of the average and were ignored`);
+  if(g.err)warnings.push(g.err);
+  $('dataNotice').textContent=warnings.join(' · ');
+  $('extrapNotice').textContent=g.extrapWarnings?.length?g.extrapWarnings.join(' · '):'';
+  if(g.hasExtension){$('extrapNotice').textContent+=(g.extrapWarnings?.length?' · ':'')+'Dashed extrapolation: '+[g.extendBack!==null?'backwards to X = '+fmt(g.extendBack):'',g.extendForward!==null?'forwards to X = '+fmt(g.extendForward):''].filter(Boolean).join(' · ')+'.';$('extrapNotice').classList.add('success');}
+  else $('extrapNotice').classList.remove('success');
+  $('pointCount').textContent=g.data.points.length+' plotted point'+(g.data.points.length===1?'':'s')+(g.excluded?' · '+g.excluded+' outlier'+(g.excluded===1?'':'s'):'');refreshRowHighlights();
+  const fit=$('fitInfo');fit.textContent='';
+  if(g.models){const m=g.models.primary;
+   const pieces=[`${g.data.points.length} data points`,`${g.included} included in fit`];if(g.excluded)pieces.push(`${g.excluded} outlier${g.excluded===1?'':'s'} excluded`);
+   if(config.fitMode==='none')pieces.push('No fitted line');
+   else if(m){pieces.push((g.manualMode?'Manual ':'Automatic ')+(m.degree===1?'straight line':m.degree===2?'quadratic curve':'cubic curve'));if(g.hasExtension)pieces.push('Extrapolation enabled (dashed)');
+     pieces.push('Equation: '+makeEquation(m));if(m.r2!==null)pieces.push('R² = '+fmt(m.r2,5));
+   }else pieces.push('Not enough distinct X values for this fit');
+   const parts=document.createElement('span');parts.textContent=pieces.join('  ·  ');fit.appendChild(parts);
+  }else fit.textContent=g.err||'';
+  const isManual=config.fitMode.startsWith('manual-');
+  $('manualControls').classList.toggle('visible',isManual);
+  $('manualNote').textContent=(isManual?'Drag the orange handles vertically to adjust the '+(config.fitMode==='manual-line'?'line':'curve')+'. ':'')+'Click a plotted point to toggle its outlier status and highlight its table row. Outliers remain visible (including error bars) but are excluded from automatic fits and comparison fits.';
+  for(const axis of ['x','y']){for(const f of ['Min','Max','Tick'])$(axis+f).disabled=config[axis+'Auto'];
+   $(axis+'Symbol').placeholder='Auto: '+(String(config[axis+'Name']).split(',').length>1?String(config[axis+'Name']).split(',').pop().trim():axis);}
+  $('pointSizeOut').textContent=config.pointSize;$('lineWidthOut').textContent=config.lineWidth;
+ }
+ function syncControls(){for(const key of cfgKeys){const el=$(key);if(!el)continue;el[booleanCfg.includes(key)?'checked':'value']=config[key];}render();}
+ function applyConfig(key,value){const old=config[key];if(key==='xAuto'||key==='yAuto'){
+    // Populate manual values from the currently displayed auto range when switching.
+    if(old&&!value&&renderedAxes){const axis=key[0],a=renderedAxes[axis==='x'?'aX':'aY'];if(a){config[axis+'Min']=String(a.min);config[axis+'Max']=String(a.max);config[axis+'Tick']=String(a.tick);for(const f of ['Min','Max','Tick'])$(axis+f).value=config[axis+f];}}
+   }
+   config[key]=value;
+   if(key==='fitMode'&&value.startsWith('manual-')&& !old.startsWith('manual-'))setManualFromAuto(value);
+   render();
+ }
+ function setManualFromAuto(mode){const pts=readPoints().points,aX=configuredAxis('x',pts),aY=configuredAxis('y',pts);if(!aX||!aY)return;
+  const deg=mode==='manual-line'?1:2,us=deg===1?[.15,.85]:[.10,.50,.90],reg=polyFit(pts.filter(p=>!p.outlier),deg);
+  let output=us.map(u=>{const x=aX.min+u*(aX.max-aX.min),y=reg?reg.predict(x):aY.min+u*(aY.max-aY.min);return clamp((y-aY.min)/(aY.max-aY.min),.02,.98);});
+  manual[deg===1?'line':'curve']=output;
+ }
+ // Excel / Sheets multi-cell clipboard paste directly into any data-column cell.
+ // One copied column fills that column; a 2-column block starting at X average
+ // maps to X average and Y average; 3- or 6-column ranges fill neighbouring fields.
+ $('dataBody').addEventListener('paste',e=>{
+  const target=e.target.closest('input[data-field]');if(!target)return;
+  const raw=e.clipboardData?.getData('text/plain');
+  if(!raw||!/[\t\r\n]/.test(raw))return; // Single value: use normal browser paste.
+  e.preventDefault();
+  const startRow=rows.findIndex(r=>r.id===Number(target.dataset.id));
+  const firstCol=fieldNames.indexOf(target.dataset.field);
+  if(startRow<0||firstCol<0)return;
+  let grid=raw.replace(/\r\n?/g,'\n').replace(/\n+$/,'').split('\n').map(line=>line.split('\t').map(s=>s.trim()));
+  // Accept a copied header such as "Time (s)" followed by numeric measurements.
+  if(grid.length>1&&grid[0].every(cell=>!ok(num(cell)))&&grid.slice(1).some(line=>line.some(cell=>ok(num(cell)))))grid.shift();
+  if(!grid.length||!grid.some(line=>line.some(cell=>cell!==''))){notify('Clipboard contains no measurements.',true);return;}
+  const columns=Math.max(...grid.map(r=>r.length));
+  if(columns>6||startRow+grid.length>5000){notify('Too much Excel data: maximum six columns and 5,000 rows.',true);return;}
+  let destinations;
+  if(firstCol===0&&columns===2)destinations=[0,3];
+  else if(firstCol===0&&columns===3)destinations=[0,1,2];
+  else if(firstCol===3&&columns===3)destinations=[3,4,5];
+  else destinations=Array.from({length:columns},(_,i)=>firstCol+i);
+  if(destinations.some(col=>col>=fieldNames.length)){
+   notify('This pasted range extends beyond Y maximum. Choose an earlier starting column.',true);return;
+  }
+  while(rows.length<startRow+grid.length)rows.push(rowObject());
+  for(let i=0;i<grid.length;i++)for(let j=0;j<grid[i].length;j++){
+   rows[startRow+i][fieldNames[destinations[j]]]=grid[i][j];
+  }
+  renderTable();render();
+  const focusId=rows[startRow].id;
+  const input=$('dataBody').querySelector(`[data-id="${focusId}"][data-field="${fieldNames[firstCol]}"]`);
+  input?.focus({preventScroll:true});
+  notify(`Pasted ${grid.length} row(s) into ${columns} column(s). Other columns kept unchanged.`);
+ });
+ $('dataBody').addEventListener('input',e=>{if(!e.target.matches('input[data-field]'))return;const r=rows.find(r=>r.id===Number(e.target.dataset.id));if(r){r[e.target.dataset.field]=e.target.value;render();}});
+ $('dataBody').addEventListener('change',e=>{const cb=e.target.closest('input[data-outlier]');if(!cb)return;const r=rows.find(r=>r.id===Number(cb.dataset.outlier));if(!r)return;
+  selectedRowId=r.id;r.outlier=cb.checked;render();notify(`Row ${rows.indexOf(r)+1} ${r.outlier?'marked as an outlier and excluded from calculated fits':'included again in calculated fits'}.`);
+ });
+ $('dataBody').addEventListener('click',e=>{const btn=e.target.closest('button[data-delete]');if(!btn)return;const id=Number(btn.dataset.delete);rows=rows.filter(r=>r.id!==id);if(selectedRowId===id)selectedRowId=null;if(!rows.length)rows.push(rowObject());renderTable();render();});
+ $('addRow').addEventListener('click',()=>{rows.push(rowObject());renderTable();render();const ins=$('dataBody').lastElementChild.querySelector('input');ins?.focus();});
+ $('clearRows').addEventListener('click',()=>{rows=Array.from({length:5},()=>rowObject());selectedRowId=null;renderTable();render();notify('Table cleared. Add your measurements.');});
+ $('exampleBtn').addEventListener('click',()=>{config={...defaultConfig};nextId=1;rows=exampleRows.map(rowObject);selectedRowId=null;manual={line:[.2,.8],curve:[.15,.5,.85]};renderTable();syncControls();notify('Example data loaded.');});
+ $('pasteToggle').addEventListener('click',()=>{$('pastebox').classList.toggle('visible');if($('pastebox').classList.contains('visible'))$('pasteArea').focus();});
+ $('pasteCancel').addEventListener('click',()=>{$('pastebox').classList.remove('visible');});
+ function parseCSVline(line,delim){const fields=[];let cur='',quote=false;for(let i=0;i<line.length;i++){let ch=line[i];if(ch==='"'){if(quote&&line[i+1]==='"'){cur+='"';i++;}else quote=!quote;}else if(ch===delim&&!quote){fields.push(cur.trim());cur='';}else cur+=ch;}fields.push(cur.trim());return fields;}
+ $('pasteImport').addEventListener('click',()=>{const raw=$('pasteArea').value.trim();if(!raw){notify('Paste some table data first.',true);return;}
+  const lines=raw.split(/\r?\n/).filter(t=>t.trim());const delim=raw.includes('\t')?'\t':raw.includes(';')?';':',';
+  const parsed=lines.map(line=>parseCSVline(line,delim));let out=[];
+  for(let i=0;i<parsed.length;i++){
+   const c=parsed[i];if(![2,6].includes(c.length)){notify(`Row ${i+1} has ${c.length} columns. Use 2 or 6 columns.`,true);return;}
+   if(i===0&&!ok(num(c[0]))&&!ok(num(c[c.length===2?1:3]))&&/[a-zA-Z]/.test(c.join(' ')))continue;
+   let data=c.length===2?{x:c[0],y:c[1]}:Object.fromEntries(fieldNames.map((k,j)=>[k,c[j]]));out.push(rowObject(data));
+  }
+  if(!out.length){notify('No numerical rows found.',true);return;}
+  rows=out;selectedRowId=null;renderTable();render();$('pastebox').classList.remove('visible');notify('Imported '+out.length+' row(s).');
+ });
+ for(const node of document.querySelectorAll('[data-config]')){
+  const key=node.dataset.config;
+  node.addEventListener(node.type==='checkbox'?'change':(node.type==='color'||node.tagName==='SELECT'?'change':'input'),()=>{
+   let value=booleanCfg.includes(key)?node.checked:numericCfg.includes(key)?Number(node.value):node.value;
+   applyConfig(key,value);
+  });
+ }
+ $('resetHandles').addEventListener('click',()=>{setManualFromAuto(config.fitMode);render();notify('Manual handles reset near the calculated fit.');});
+ function pointerToSVG(ev,svg){const rect=svg.getBoundingClientRect();return{x:(ev.clientX-rect.left)*dims.W/rect.width,y:(ev.clientY-rect.top)*dims.H/rect.height};}
+ $('graphBox').addEventListener('click',e=>{const point=e.target.closest('[data-point-id]');if(!point)return;const r=rows.find(r=>r.id===Number(point.dataset.pointId));if(!r)return;selectedRowId=r.id;r.outlier=!r.outlier;render();notify(`Row ${rows.indexOf(r)+1} ${r.outlier?'marked as an outlier: still plotted, excluded from calculated fits':'restored to the calculated fits'}.`);});
+ $('graphBox').addEventListener('pointerdown',e=>{
+  const handle=e.target.closest('.drag-handle');if(!handle||!config.fitMode.startsWith('manual-'))return;
+  const box=$('graphBox');if(!handle.ownerSVGElement)return;
+  dragging={index:Number(handle.dataset.handle),id:e.pointerId};
+  box.setPointerCapture(e.pointerId);e.preventDefault();
+ });
+ $('graphBox').addEventListener('pointermove',e=>{if(!dragging||dragging.id!==e.pointerId||!renderedAxes)return;
+  const svg=$('graphBox').querySelector('svg');if(!svg)return;
+  const v=pointerToSVG(e,svg).y;const norm=clamp((dims.bottom-v)/height,.015,.985),arr=config.fitMode==='manual-line'?manual.line:manual.curve;
+  arr[dragging.index]=norm;render();e.preventDefault();
+ });
+ function stopDrag(e){if(dragging&&dragging.id===e.pointerId){try{$('graphBox').releasePointerCapture(e.pointerId);}catch{}dragging=null;}}
+ $('graphBox').addEventListener('pointerup',stopDrag);$('graphBox').addEventListener('pointercancel',stopDrag);
+ // Pointer capture survives DOM replacement poorly. Listen on document as a fallback.
+ document.addEventListener('pointerup',stopDrag);
+ function filename(){let s=config.title.trim().replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,75);return s||'Scientific_Graph';}
+ function blobSave(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);}
+ function svgExport(){const g=generateGraph(true);if(g.err){notify(g.err,true);return null;}return g.html;}
+ $('svgBtn').addEventListener('click',()=>{const svg=svgExport();if(!svg)return;blobSave(new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n${svg}`],{type:'image/svg+xml;charset=utf-8'}),filename()+'.svg');notify('SVG graph downloaded.');});
+ $('pngBtn').addEventListener('click',()=>{
+  const svg=svgExport();if(!svg)return;const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}));
+  const img=new Image();img.onload=()=>{const scale=3,canvas=document.createElement('canvas');canvas.width=dims.W*scale;canvas.height=dims.H*scale;
+    const context=canvas.getContext('2d');context.fillStyle='#ffffff';context.fillRect(0,0,canvas.width,canvas.height);context.drawImage(img,0,0,canvas.width,canvas.height);
+    canvas.toBlob(blob=>{if(blob){blobSave(blob,filename()+'.png');notify('High-resolution PNG graph downloaded (3000 × 2070 pixels).');}else notify('PNG export failed. Please try SVG.',true);URL.revokeObjectURL(url);},'image/png');
+  };img.onerror=()=>{URL.revokeObjectURL(url);notify('PNG conversion failed. SVG export is available.',true);};img.src=url;
+ });
+ $('pdfBtn').addEventListener('click',()=>{const svg=svgExport();if(!svg)return;
+   // In printing, avoid displaying editing handles: temporarily render export SVG.
+   const box=$('graphBox'),before=box.innerHTML;box.innerHTML=svg;
+   const restore=()=>{window.removeEventListener('afterprint',restore);box.innerHTML=before;};
+   window.addEventListener('afterprint',restore,{once:true});
+   window.print();setTimeout(()=>{if(box.innerHTML===svg)restore();},2000);
+   notify('In the print dialog, select “Save as PDF” as the destination.');
+ });
+ $('saveBtn').addEventListener('click',()=>{const content={format:'scientific-graph-builder',version:4,created:new Date().toISOString(),config,rows:rows.map(r=>({...Object.fromEntries(fieldNames.map(k=>[k,r[k]])),outlier:r.outlier})),manual};
+  blobSave(new Blob([JSON.stringify(content,null,2)],{type:'application/json'}),filename()+'.graph.json');notify('Editable project downloaded as .graph.json.');
+ });
+ $('openBtn').addEventListener('click',()=>{$('projectFile').click();});
+ $('projectFile').addEventListener('change',async e=>{
+  const f=e.target.files?.[0];if(!f)return;try{const project=JSON.parse(await f.text());
+   if(project.format!=='scientific-graph-builder'||![1,2,3,4].includes(project.version)||!Array.isArray(project.rows))throw Error('This is not a supported graph project.');
+   let c={...defaultConfig};if(project.config&&typeof project.config==='object')for(const k of cfgKeys){const v=project.config[k];if(booleanCfg.includes(k)&&typeof v==='boolean')c[k]=v;
+     else if(numericCfg.includes(k)&&typeof v==='number'&&ok(v))c[k]=v;
+     else if(!booleanCfg.includes(k)&&!numericCfg.includes(k)&&typeof v==='string')c[k]=v.slice(0,500);
+   }
+   if(!validModes.includes(c.fitMode))c.fitMode='none';
+   for(const k of ['pointColor','fitColor','compareColor','errorColor','gridColor'])if(!/^#[\da-f]{6}$/i.test(c[k]))c[k]=defaultConfig[k];
+   config=c;nextId=1;selectedRowId=null;rows=project.rows.slice(0,5000).map(rowObject);if(!rows.length)rows=[rowObject()];
+   if(project.manual&&['line','curve'].every(k=>Array.isArray(project.manual[k]))){const m=project.manual;
+     if(m.line.length===2&&m.curve.length===3&&[...m.line,...m.curve].every(v=>typeof v==='number'&&ok(v)&&v>=0&&v<=1))manual={line:m.line.slice(),curve:m.curve.slice()};
+   }
+   renderTable();syncControls();notify('Project loaded: '+f.name);
+  }catch(err){notify('Cannot open project: '+err.message,true);}e.target.value='';
+ });
+ rows=exampleRows.map(rowObject);renderTable();syncControls();
+})();
+</script>
+</body>
+</html>
