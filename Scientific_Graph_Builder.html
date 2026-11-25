@@ -23,7 +23,7 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
 .toggle{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:560;cursor:pointer;color:#284b61}.toggle input{accent-color:#167591;width:16px;height:16px;margin:0}.axisbox{margin-top:12px;background:#f8fbfc;border:1px solid #e1edf2;padding:11px;border-radius:9px}.axishead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}.axishead b{font-size:13px}.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.four input{padding:7px 5px;min-width:0}.four .field label{font-size:11px}.grid-row{margin-top:11px;display:flex;flex-wrap:wrap;gap:12px}
 .checks{display:flex;flex-wrap:wrap;gap:8px 15px;margin-top:10px}.fit-controls{margin-top:10px;background:#f4f9fb;border-radius:8px;padding:10px;display:none}.fit-controls.visible{display:block}.fit-desc{font-size:12px;color:#5a7180;margin-top:7px}details{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}summary{font-weight:710;color:#31546a;cursor:pointer;user-select:none}.color-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:13px}.colorbox{display:flex;align-items:center;gap:7px;min-width:0}.colorbox input{width:31px;height:29px;padding:0;border:0;cursor:pointer;background:transparent}.colorbox label{font-size:11px;color:#416075}.slider-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:13px}.slider-row label{font-size:12px;color:#36536a}.slider-row input{width:100%;accent-color:#147799}.slider-row output{font-variant-numeric:tabular-nums}
 .preview-col{min-width:0;position:sticky;top:14px}.preview-panel{padding:16px 17px 15px}.graph-top{display:flex;justify-content:space-between;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:9px}.graph-top h2{font-size:16px;margin:0}.chip{font-size:11px;color:#2b6757;background:#e7f7ee;border-radius:30px;padding:4px 9px;font-weight:690}
-.graph-box{width:100%;background:#fff;border:1px solid #dfe7ed;border-radius:7px;overflow:hidden}.graph-box svg{width:100%;height:auto;display:block;user-select:none}.graph-box svg .drag-handle{cursor:ns-resize;touch-action:none}.graph-box svg .drag-handle:hover{filter:drop-shadow(0 0 3px #d8792f88)}.graph-box svg .data-point-target{cursor:pointer}.graph-box svg .data-point-target:hover .point-hit{stroke:#a33d2d;stroke-opacity:.65}.outlier-tip{background:#fff1ed;border:1px solid #ecc6bd;color:#904238;border-radius:7px;padding:8px 10px;font-size:12px;margin-top:9px}
+.graph-box{width:100%;background:#fff;border:1px solid #dfe7ed;border-radius:7px;overflow:hidden}.graph-box svg{width:100%;height:auto;display:block;user-select:none}.graph-box svg .drag-handle{cursor:grab;touch-action:none}.graph-box svg .drag-handle:active{cursor:grabbing}.graph-box svg .drag-handle:hover{filter:drop-shadow(0 0 3px #d8792f88)}.graph-box svg .data-point-target{cursor:pointer}.graph-box svg .data-point-target:hover .point-hit{stroke:#a33d2d;stroke-opacity:.65}.outlier-tip{background:#fff1ed;border:1px solid #ecc6bd;color:#904238;border-radius:7px;padding:8px 10px;font-size:12px;margin-top:9px}
 .fitinfo{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:10px;min-height:23px;color:#526a7b;font-size:12px}.fitinfo strong{color:#294b60}.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}
 .export-area{background:#f2f7fa;border:1px solid #e0eaf0;padding:12px;border-radius:9px;margin-top:13px}.export-area h3{font-size:13px;margin:0 0 9px}.export-area .btnrow button{flex:1;min-width:104px}.footerhint{margin-top:12px;color:#6c8292;font-size:11px}.graph-note{font-size:12px;color:#536d7e;margin-top:8px}#status{font-size:12px;margin-top:8px;color:#225d71;min-height:16px}
 @media(max-width:1200px){main{grid-template-columns:minmax(410px,500px) minmax(400px,1fr);padding:15px;gap:13px}.preview-panel{padding:13px}}
@@ -42,7 +42,7 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
 </head>
 <body>
 <header>
-  <div class="brand"><div class="logo">x·y</div><div><h1>Scientific Graph Builder</h1><p>Scientific graphs made clear · Version 4 · Works offline · ISZL Science</p></div></div>
+  <div class="brand"><div class="logo">x·y</div><div><h1>Scientific Graph Builder</h1><p>Scientific graphs made clear · Version 5 · Works offline · ISZL Science</p></div></div>
   <div class="header-actions"><button class="headbtn" id="exampleBtn">Load example</button><button class="headbtn" id="saveBtn">Save project</button><button class="headbtn" id="openBtn">Open project</button><input id="projectFile" type="file" accept=".json,application/json" hidden></div>
 </header>
 <main>
@@ -85,9 +85,9 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
   <section class="panel"><div class="panel-inner">
    <div class="heading"><h2><span class="step">03</span>Best-fit line or curve</h2></div>
    <div class="field"><label for="fitMode">Method</label><select id="fitMode" data-config="fitMode">
-     <option value="auto-line">Automatic · straight line</option><option value="auto-quadratic">Automatic · quadratic curve</option><option value="auto-cubic">Automatic · cubic curve</option><option value="manual-line">Manual · adjustable straight line</option><option value="manual-curve">Manual · adjustable smooth curve</option><option value="none">None · data points only</option>
+     <option value="auto-line">Automatic · straight line</option><option value="auto-line-origin">Automatic · straight line through origin</option><option value="auto-quadratic">Automatic · quadratic curve</option><option value="auto-cubic">Automatic · cubic curve</option><option value="auto-sqrt">Automatic · square-root curve (X ≥ 0)</option><option value="auto-sqrt-origin">Automatic · square-root through origin</option><option value="manual-line">Manual · adjustable straight line</option><option value="manual-curve">Manual · adjustable quadratic curve (3 handles)</option><option value="manual-sqrt">Manual · adjustable square-root curve (2 handles)</option><option value="none">None · data points only</option>
    </select></div>
-   <div id="manualControls" class="fit-controls"><div style="font-weight:720;color:#8a4c1e;font-size:13px">Drag the orange circular handles on the graph</div><p class="fit-desc">Manual straight line: 2 handles. Manual curve: 3 handles. Drag up or down to change the fit without moving your data points.</p><div class="btnrow" style="margin-top:9px"><button class="mini" id="resetHandles">Reset manual fit</button></div><div class="checks"><label class="toggle"><input id="showComparison" data-config="showComparison" type="checkbox">Show calculated fit for comparison</label></div></div>
+   <div id="manualControls" class="fit-controls"><div style="font-weight:720;color:#8a4c1e;font-size:13px">Drag the numbered orange handles in any direction</div><p class="fit-desc" id="handleHelp">All handles can move left, right, up or down. For quadratic curves, three independent points determine the curve. For straight lines and square-root curves, two are sufficient.</p><div class="checks"><label class="toggle"><input id="manualOrigin" data-config="manualOrigin" type="checkbox">Keep manual fit through (0, 0)</label></div><p class="fit-desc">Switching this on shifts the existing curve vertically to the origin without changing its slope or second derivative. Subsequent handle adjustments can change its shape, but it will still pass through the origin. The origin must be within the function's domain.</p><div class="btnrow" style="margin-top:9px"><button class="mini" id="resetHandles">Reset manual fit</button></div><div class="checks"><label class="toggle"><input id="showComparison" data-config="showComparison" type="checkbox">Show calculated fit for comparison</label></div><div class="notice" id="handleNotice" role="status"></div></div>
    <div class="axisbox extrap-controls" aria-labelledby="extrapHeading">
      <div class="axishead"><b id="extrapHeading">Optional extrapolation</b><span class="subtle">Use X-axis values</span></div>
      <div class="fields">
@@ -98,7 +98,7 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
      <div class="notice" id="extrapNotice" role="status"></div>
    </div>
    <div class="checks"><label class="toggle"><input type="checkbox" id="showEquation" data-config="showEquation" checked>Include equation on exported graph</label></div>
-   <p class="hint">Only exclude a measurement for a sound experimental reason, not simply to improve R². Mark a point as an outlier to exclude it from all automatic regressions, including comparisons; manually adjusted lines stay where you put them. Automatic fits use least-squares regression. The solid fitted section spans the included measurements; use the optional extrapolation inputs to extend beyond this range. <b>Especially for curved fits, extrapolated predictions may be unreliable.</b> A fitted curve is not simply a line joining the points.</p>
+   <p class="hint">Only exclude a measurement for a sound experimental reason, not simply to improve R². Mark a point as an outlier to exclude it from all automatic regressions, including comparisons; manually adjusted lines stay where you put them. Automatic fits use least-squares regression (including square-root fits, using √X as the transformed variable). The solid fitted section spans the included measurements; use the optional extrapolation inputs to extend beyond this range. <b>Especially for curved fits, extrapolated predictions may be unreliable.</b> A fitted curve is not simply a line joining the points.</p>
    <details><summary>Appearance options</summary>
     <div class="color-grid">
      <div class="colorbox"><input type="color" id="pointColor" data-config="pointColor" value="#233e55"><label for="pointColor">Data points</label></div>
@@ -129,7 +129,7 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
  const defaultConfig = {
    title:'Extension of a spring against applied force', xName:'Applied force, F',xUnits:'N',xSymbol:'',yName:'Extension, x',yUnits:'cm',ySymbol:'',
    xAuto:true,yAuto:true,xMin:'0',xMax:'6',xTick:'1',xGrid:'',yMin:'0',yMax:'7',yTick:'1',yGrid:'',
-   showGrid:true,showBorder:true,showXError:false,showYError:true,fitMode:'auto-line',showComparison:false,showEquation:true,extrapolateBack:'',extrapolateForward:'',
+   showGrid:true,showBorder:true,showXError:false,showYError:true,fitMode:'auto-line',showComparison:false,manualOrigin:false,showEquation:true,extrapolateBack:'',extrapolateForward:'',
    pointColor:'#233e55',fitColor:'#1773a1',compareColor:'#b18442',errorColor:'#a75f4b',gridColor:'#dbe2e8',pointSize:5,lineWidth:3,pointSymbol:'circle',lineStyle:'solid'
  };
  const exampleRows = [
@@ -140,11 +140,12 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
    {x:'5.0',xmin:'4.95',xmax:'5.05',y:'5.04',ymin:'4.82',ymax:'5.25'}
  ];
  let rows = []; let config={...defaultConfig};let nextId=1;let renderedAxes=null;let dragging=null;let selectedRowId=null;
- let manual={line:[0.2,0.8],curve:[0.15,0.50,0.85]}; // vertical positions, as fraction of axis height from lower edge
+ // Manual anchors have physical X and Y coordinates; unlike V4, they never move when scales change.
+ let manual={line:[],curve:[],sqrt:[]};
  const dims={W:1000,H:690,left:116,right:941,top:79,bottom:561};
  const width=dims.right-dims.left,height=dims.bottom-dims.top;
- const validModes=['auto-line','auto-quadratic','auto-cubic','manual-line','manual-curve','none'];
- const cfgKeys=Object.keys(defaultConfig),numericCfg=['pointSize','lineWidth'],booleanCfg=['xAuto','yAuto','showGrid','showBorder','showXError','showYError','showComparison','showEquation'];
+ const validModes=['auto-line','auto-line-origin','auto-quadratic','auto-cubic','auto-sqrt','auto-sqrt-origin','manual-line','manual-curve','manual-sqrt','none'];
+ const cfgKeys=Object.keys(defaultConfig),numericCfg=['pointSize','lineWidth'],booleanCfg=['xAuto','yAuto','showGrid','showBorder','showXError','showYError','showComparison','manualOrigin','showEquation'];
  const fieldNames=['x','xmin','xmax','y','ymin','ymax'];
  function rowObject(obj={}){let o={id:nextId++,outlier:obj.outlier===true};for(const k of fieldNames)o[k]=String(obj[k]??'');return o;}
  function htmlEscape(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -243,7 +244,8 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
   return{predict,coeff:orig,r2,degree:co.length-1};
  }
  function throughAnchors(anchors,points){const degree=anchors.length-1;
-  const center=(anchors[0].x+anchors[anchors.length-1].x)/2,scale=(anchors[anchors.length-1].x-anchors[0].x)/2;
+  const xlo=Math.min(...anchors.map(p=>p.x)),xhi=Math.max(...anchors.map(p=>p.x));
+  const center=(xlo+xhi)/2,scale=(xhi-xlo)/2;
   if(!(scale>0))return null;const n=degree+1,mat=anchors.map(p=>{const z=(p.x-center)/scale;return [...Array.from({length:n},(_,k)=>z**k),p.y];});
   for(let col=0;col<n;col++){let pivot=col;for(let row=col+1;row<n;row++)if(Math.abs(mat[row][col])>Math.abs(mat[pivot][col]))pivot=row;
    if(Math.abs(mat[pivot][col])<1e-12)return null;[mat[col],mat[pivot]]=[mat[pivot],mat[col]];
@@ -251,6 +253,69 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
    for(let row=0;row<n;row++)if(row!==col){const mul=mat[row][col];for(let j=col;j<=n;j++)mat[row][j]-=mul*mat[col][j];}
   }
   return buildModel(mat.map(row=>row[n]),center,scale,points);
+ }
+ function modelR2(predict,points){if(!points.length)return null;const mean=points.reduce((sum,p)=>sum+p.y,0)/points.length;
+  const total=points.reduce((sum,p)=>sum+(p.y-mean)**2,0),error=points.reduce((sum,p)=>sum+(p.y-predict(p.x))**2,0);
+  return total<1e-14?(error<1e-14?1:0):1-error/total;
+ }
+ function linearOrigin(points){const denom=points.reduce((t,p)=>t+p.x*p.x,0);
+  if(!points.length||denom<1e-15)return null;
+  const slope=points.reduce((t,p)=>t+p.x*p.y,0)/denom;
+  return buildModel([0,slope],0,1,points);
+ }
+ function squareRootFit(points,origin=false){if(points.length<(origin?1:2)||points.some(p=>p.x<0))return null;
+  const ts=points.map(p=>Math.sqrt(p.x));const n=points.length;
+  let a,b;if(origin){const denom=ts.reduce((v,t)=>v+t*t,0);if(denom<=1e-14)return null;
+   a=ts.reduce((v,t,i)=>v+t*points[i].y,0)/denom;b=0;
+  }else{const meanT=ts.reduce((v,t)=>v+t,0)/n,meanY=points.reduce((v,p)=>v+p.y,0)/n;
+   const den=ts.reduce((v,t)=>v+(t-meanT)**2,0);if(den<=1e-14)return null;
+   a=ts.reduce((v,t,i)=>v+(t-meanT)*(points[i].y-meanY),0)/den;b=meanY-a*meanT;
+  }
+  return rootModel(a,b,points);
+ }
+ function rootModel(a,b,points=[]){const predict=x=>x<0?NaN:a*Math.sqrt(x)+b;
+  return{predict,coeff:[b,a],r2:modelR2(predict,points),degree:0,kind:'sqrt'};
+ }
+ function manualRoot(anchors,points){if(anchors.length!==2||anchors.some(p=>p.x<0)||points.some(p=>p.x<0))return null;
+  const [p,q]=anchors,den=Math.sqrt(q.x)-Math.sqrt(p.x);if(Math.abs(den)<1e-9)return null;
+  const a=(q.y-p.y)/den,b=p.y-a*Math.sqrt(p.x);
+  return rootModel(a,b,points);
+ }
+ function originQuadraticFromTwo(p,q,points){if(!p||!q)return null;
+  // Given y = a*x² + b*x, the two draggable points plus the origin determine a,b.
+  if(Math.abs(p.x)<1e-9||Math.abs(q.x)<1e-9||Math.abs(q.x-p.x)<1e-9)return null;
+  const a=(q.y/q.x-p.y/p.x)/(q.x-p.x),b=p.y/p.x-a*p.x;
+  return buildModel([0,b,a],0,1,points);
+ }
+ function manualKey(mode){return mode==='manual-line'?'line':mode==='manual-sqrt'?'sqrt':'curve';}
+ function rawManualModel(mode,pts){const arr=manual[manualKey(mode)];if(!arr||arr.length<(mode==='manual-curve'?3:2))return null;
+  return mode==='manual-sqrt'?manualRoot(arr,pts):throughAnchors(arr,pts);
+ }
+ function manualModel(mode,pts){const model=rawManualModel(mode,pts);if(!model||!config.manualOrigin)return model;
+  // From V5 onward an origin-constrained model stays exactly at (0,0).
+  // The coefficient offset is removed without altering the quadratic x² coefficient.
+  const shift=model.predict(0);if(!ok(shift))return model;
+  if(model.kind==='sqrt')return rootModel(model.coeff[1],0,pts);
+  return buildModel([0,...model.coeff.slice(1)],0,1,pts);
+ }
+ function moveManualToOrigin(mode){const model=rawManualModel(mode,readPoints().points.filter(p=>!p.outlier));
+  if(!model)return false;const intercept=model.predict(0);if(!ok(intercept))return false;
+  manual[manualKey(mode)].forEach(p=>{p.y-=intercept;});return true;
+ }
+ function setManualFromAuto(mode){const pts=readPoints().points,aX=configuredAxis('x',pts),aY=configuredAxis('y',pts);if(!aX||!aY)return;
+  const incl=pts.filter(p=>!p.outlier),which=manualKey(mode),us=which==='curve'?[.17,.5,.83]:[.22,.78];
+  const fit=which==='sqrt'?squareRootFit(incl):polyFit(incl,which==='line'?1:2);
+  let anchors=us.map(u=>{
+   let x=aX.min+(aX.max-aX.min)*u;if(which==='sqrt')x=Math.max(0,x);
+   const y=fit?fit.predict(x):aY.min+u*(aY.max-aY.min);
+   return{x,y:ok(y)?y:0};
+  });
+  if(which==='sqrt'&&Math.abs(anchors[1].x-anchors[0].x)<1e-8){anchors=[{x:0,y:fit?fit.predict(0):0},{x:Math.max(1,aX.max),y:fit?fit.predict(Math.max(1,aX.max)):1}];}
+  manual[which]=anchors;
+  if(config.manualOrigin)moveManualToOrigin(mode);
+ }
+ function ensureManual(mode){const key=manualKey(mode),required=mode==='manual-curve'?3:2;
+  if(!Array.isArray(manual[key])||manual[key].length!==required||manual[key].some(p=>!ok(p.x)||!ok(p.y)))setManualFromAuto(mode);
  }
  const greek={Delta:'Δ',delta:'δ',mu:'μ',rho:'ρ',theta:'θ',alpha:'α',beta:'β',gamma:'γ',Omega:'Ω',omega:'ω',lambda:'λ',sigma:'σ',pi:'π',epsilon:'ε',tau:'τ',phi:'φ',times:'×',degree:'°',pm:'±',cdot:'·',mathrm:''};
  // Render scientific text in SVG. Supported examples: v_0, v_{avg}, t^2, m s^{-2}, \\Delta E_k.
@@ -281,7 +346,9 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
   return extracted||axis;
  }
  function makeEquation(model){if(!model)return'';
-  const y=chosenSymbol('y'),x=chosenSymbol('x');let text=y+' = ',added=false;
+  const y=chosenSymbol('y'),x=chosenSymbol('x');
+  if(model.kind==='sqrt'){const a=model.coeff[1],b=model.coeff[0],leading=(a<0?'−':'')+fmt(Math.abs(a),4)+'·√('+x+')';return y+' = '+leading+(Math.abs(b)<1e-10?'':(b<0?' − ':' + ')+fmt(Math.abs(b),4));}
+  let text=y+' = ',added=false;
   for(let k=model.degree;k>=0;k--){const c=model.coeff[k];if(Math.abs(c)<1e-10)continue;
    if(added)text+=c<0?' − ':' + ';else if(c<0)text+='−';
    const abs=fmt(Math.abs(c),4);
@@ -290,7 +357,7 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
   }
   if(!added)text+='0';return text;
  }
- function polyPath(model,x0,x1,project,steps=230){if(!model||!(x1>x0))return'';let p='';for(let i=0;i<=steps;i++){const x=x0+(x1-x0)*i/steps;const y=model.predict(x);if(!ok(y)||Math.abs(y)>1e15)continue;const pt=project(x,y);p+=(p?' L ':'M ')+pt.x.toFixed(3)+' '+pt.y.toFixed(3);}return p;}
+ function polyPath(model,x0,x1,project,steps=230){if(!model||!(x1>x0))return'';let p='';for(let i=0;i<=steps;i++){const x=x0+(x1-x0)*i/steps;const y=model.predict(x);if(!ok(y)||Math.abs(y)>1e15){p+=' ';continue;}const pt=project(x,y);p+=(p.trim()?' L ':'M ')+pt.x.toFixed(3)+' '+pt.y.toFixed(3);}return p;}
  function generateGraph(exporting=false){const data=readPoints(),pts=data.points,fitPts=pts.filter(p=>!p.outlier);const excluded=pts.length-fitPts.length;
   const baseX=configuredAxis('x',pts),baseY=configuredAxis('y',pts);
   if(!baseX||!baseY)return{html:emptyGraph('Check the manually specified axis limits and tick intervals.'),err:'Invalid axis limits or tick intervals.',data};
@@ -314,16 +381,20 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
   if(!config.xAuto){for(const v of targets)if(v<aX.min||v>aX.max){extrapWarnings.push('Extrapolation outside the X axis is clipped; widen the manual X limits to show it.');break;}}
   let models={primary:null,comparison:null},anchors=[];
   if(mode==='auto-line')models.primary=polyFit(fitPts,1);
+  if(mode==='auto-line-origin')models.primary=linearOrigin(fitPts);
   if(mode==='auto-quadratic')models.primary=polyFit(fitPts,2);
   if(mode==='auto-cubic')models.primary=polyFit(fitPts,3);
-  if(manualMode){const yy=mode==='manual-line'?manual.line:manual.curve;const us=mode==='manual-line'?[.15,.85]:[.10,.50,.90];
-   // Keep manually adjusted handles anchored to the pre-extrapolation scales.
-   // Extending an axis must never silently alter the physical fitted model.
-   anchors=us.map((u,i)=>({x:baseX.min+(baseX.max-baseX.min)*u,y:baseY.min+(baseY.max-baseY.min)*yy[i]}));
-   models.primary=throughAnchors(anchors,fitPts);
-   if(config.showComparison)models.comparison=polyFit(fitPts,mode==='manual-line'?1:2);
+  if(mode==='auto-sqrt'||mode==='auto-sqrt-origin'){
+   models.primary=squareRootFit(fitPts,mode==='auto-sqrt-origin');
+   if(fitPts.some(p=>p.x<0))extrapWarnings.push('A square-root fit requires X ≥ 0 for every included point. Mark invalid measurements as outliers or choose another model.');
   }
-  if(targets.length&&models.primary&&config.yAuto&&!manualMode){
+  if(manualMode){ensureManual(mode);anchors=manual[manualKey(mode)];
+   models.primary=manualModel(mode,fitPts);
+   if(config.showComparison)models.comparison=mode==='manual-sqrt'?squareRootFit(fitPts,config.manualOrigin):config.manualOrigin&&mode==='manual-line'?linearOrigin(fitPts):polyFit(fitPts,mode==='manual-line'?1:2);
+  }
+  if(mode==='manual-sqrt'&&fitPts.some(p=>p.x<0))extrapWarnings.push('A square-root fit requires X ≥ 0 for all included measurements.');
+  if(models.primary?.kind==='sqrt'&&extendBack!==null&&extendBack<0){extrapWarnings.push('Square-root extrapolation stops at X = 0 (negative X is outside its real-valued domain).');}
+  if(targets.length&&models.primary&&config.yAuto){
    // Include extrapolated model values in the automatic Y scale, including curve turning points.
    const left=extendBack??minPointX,right=extendForward??maxPointX,extraY=[];
    if(right>left){for(let i=0;i<=160;i++){
@@ -354,13 +425,14 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
   svg+=`<g clip-path="url(#${pathId})">`;
   function fitPaths(model,color,comparison=false){if(!model||!fitPts.length||!(maxPointX>minPointX))return '';
    let paths='',strokeWidth=config.lineWidth;
-   const main=polyPath(model,minPointX,maxPointX,project,model.degree===1?2:230);
+   const fittedStart=model.kind==='sqrt'?Math.max(0,minPointX):minPointX;
+   const main=polyPath(model,fittedStart,maxPointX,project,model.degree===1?2:230);
    const middleDash=comparison?'stroke-dasharray="12 8"':config.lineStyle==='dashed'?'stroke-dasharray="11 8"':'';
    paths+=`<path data-fit-part="measured" d="${main}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" ${middleDash} stroke-linejoin="round" stroke-linecap="round"/>`;
    for(const [dir,target,edge] of [['backwards',extendBack,minPointX],['forwards',extendForward,maxPointX]]){
     if(target===null)continue;
     const start=Math.min(target,edge),end=Math.max(target,edge);
-    const path=polyPath(model,start,end,project,model.degree===1?2:200);
+    const path=polyPath(model,model.kind==='sqrt'?Math.max(0,start):start,end,project,model.degree===1?2:200);
     // For an already dashed fit, use dotted extrapolation to distinguish segments.
     const dash=comparison||config.lineStyle==='dashed'?'3 9':'11 7';
     paths+=`<path data-extrapolate="${dir}" d="${path}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" stroke-dasharray="${dash}" opacity="0.84" stroke-linejoin="round" stroke-linecap="round"/>`;
@@ -385,10 +457,10 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
    if(!exporting){svg+=`<g class="data-point-target" data-point-id="${p.id}"><circle class="point-hit" cx="${pt.x}" cy="${pt.y}" r="${Math.max(15,+config.pointSize+10)}" fill="transparent" stroke="#a33d2d" stroke-width="2" stroke-opacity="0"/><title>Row ${p.rowIndex}: (${fmt(p.x)}, ${fmt(p.y)}). Click to ${p.outlier?'include':'exclude'} in automatic fit.</title></g>`;}
   }
   svg+='</g>';
-  if(manualMode&&!exporting){for(let i=0;i<anchors.length;i++){let p=project(anchors[i].x,anchors[i].y);
-   svg+=`<line x1="${p.x}" y1="${dims.top}" x2="${p.x}" y2="${dims.bottom}" stroke="#e19a4c" stroke-opacity=".33" stroke-width="1.4" stroke-dasharray="6 7"/>`;
-   svg+=`<circle class="drag-handle" data-handle="${i}" cx="${p.x}" cy="${p.y}" r="12" fill="#e48b2e" stroke="white" stroke-width="3"/>`;
-   svg+=`<circle cx="${p.x}" cy="${p.y}" r="3" fill="#fff" pointer-events="none"/>`;
+  if(manualMode&&!exporting){for(let i=0;i<anchors.length;i++){const p=project(anchors[i].x,anchors[i].y);
+   if(p.x<dims.left-18||p.x>dims.right+18||p.y<dims.top-18||p.y>dims.bottom+18)continue;
+   svg+=`<circle class="drag-handle" data-handle="${i}" cx="${p.x}" cy="${p.y}" r="15" fill="#e48b2e" stroke="white" stroke-width="3"><title>Handle ${i+1}. Drag horizontally or vertically. X = ${fmt(anchors[i].x)}, Y = ${fmt(anchors[i].y)}</title></circle>`;
+   svg+=`<text class="drag-handle" data-handle="${i}" x="${p.x}" y="${p.y+5}" text-anchor="middle" font-size="15" font-weight="bold" fill="white" pointer-events="auto">${i+1}</text>`;
   }}
   if(models.primary&&config.showEquation){let eq=makeEquation(models.primary);const maxChars=85;if(eq.length>maxChars)eq=eq.slice(0,maxChars-1)+'…';
    svg+=`<text x="500" y="675" text-anchor="middle" font-size="15" fill="#375a6b">${htmlEscape((manualMode?'Manual: ':'Fit: '))}${tspans(eq)}${!manualMode&&models.primary.r2!==null?'   |   R² = '+htmlEscape(fmt(models.primary.r2,5)):''}</text>`;
@@ -397,6 +469,7 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
   return {html:svg,data,models,aX,aY,manualMode,excluded,included:fitPts.length,extrapWarnings,extendBack,extendForward,hasExtension};
  }
  function emptyGraph(msg){return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 690" style="background:#fff;font-family:Arial,sans-serif"><rect width="1000" height="690" fill="#fff"/><text x="500" y="346" fill="#ad5940" text-anchor="middle" font-size="23">${htmlEscape(msg)}</text></svg>`;}
+ function modeNotice(mode){if(mode.includes('sqrt'))return 'Square-root fit requires X ≥ 0 and distinct X values';return 'Not enough distinct X values for this fit';}
  function render(){const g=generateGraph(false);$('graphBox').innerHTML=g.html;
   const warnings=[];if(g.data.incomplete)warnings.push(`${g.data.incomplete} incomplete or non-numeric row(s) skipped`);
   if(g.data.bad)warnings.push(`${g.data.bad} invalid minimum/maximum value(s) ignored`);
@@ -411,14 +484,16 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
   if(g.models){const m=g.models.primary;
    const pieces=[`${g.data.points.length} data points`,`${g.included} included in fit`];if(g.excluded)pieces.push(`${g.excluded} outlier${g.excluded===1?'':'s'} excluded`);
    if(config.fitMode==='none')pieces.push('No fitted line');
-   else if(m){pieces.push((g.manualMode?'Manual ':'Automatic ')+(m.degree===1?'straight line':m.degree===2?'quadratic curve':'cubic curve'));if(g.hasExtension)pieces.push('Extrapolation enabled (dashed)');
+   else if(m){pieces.push((g.manualMode?'Manual ':'Automatic ')+(m.kind==='sqrt'?'square-root curve':m.degree===1?'straight line':m.degree===2?'quadratic curve':'cubic curve'));if(g.hasExtension)pieces.push('Extrapolation enabled (dashed)');
      pieces.push('Equation: '+makeEquation(m));if(m.r2!==null)pieces.push('R² = '+fmt(m.r2,5));
-   }else pieces.push('Not enough distinct X values for this fit');
+   }else pieces.push(modeNotice(config.fitMode));
    const parts=document.createElement('span');parts.textContent=pieces.join('  ·  ');fit.appendChild(parts);
   }else fit.textContent=g.err||'';
   const isManual=config.fitMode.startsWith('manual-');
   $('manualControls').classList.toggle('visible',isManual);
-  $('manualNote').textContent=(isManual?'Drag the orange handles vertically to adjust the '+(config.fitMode==='manual-line'?'line':'curve')+'. ':'')+'Click a plotted point to toggle its outlier status and highlight its table row. Outliers remain visible (including error bars) but are excluded from automatic fits and comparison fits.';
+  $('handleHelp').textContent=config.fitMode==='manual-curve'?'Three numbered handles can each move left, right, up or down; they define a quadratic curve.':config.fitMode==='manual-sqrt'?'Two numbered handles can move in both directions; two points determine a square-root curve of the form Y = a√X + b. X cannot be negative.':'Move both handles left, right, up or down to choose a straight line.';
+  $('handleNotice').textContent=isManual&&config.manualOrigin?'Through origin is ON. Toggling this on preserved curvature; further dragging adjusts the fit while keeping its intercept at zero.':'';
+  $('manualNote').textContent=(isManual?'Drag the orange handles left, right, up or down to adjust the '+(config.fitMode==='manual-line'?'line':'curve')+'. ':'')+'Click a plotted point to toggle its outlier status and highlight its table row. Outliers remain visible (including error bars) but are excluded from automatic fits and comparison fits.';
   for(const axis of ['x','y']){for(const f of ['Min','Max','Tick'])$(axis+f).disabled=config[axis+'Auto'];
    $(axis+'Symbol').placeholder='Auto: '+(String(config[axis+'Name']).split(',').length>1?String(config[axis+'Name']).split(',').pop().trim():axis);}
   $('pointSizeOut').textContent=config.pointSize;$('lineWidthOut').textContent=config.lineWidth;
@@ -429,13 +504,9 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
     if(old&&!value&&renderedAxes){const axis=key[0],a=renderedAxes[axis==='x'?'aX':'aY'];if(a){config[axis+'Min']=String(a.min);config[axis+'Max']=String(a.max);config[axis+'Tick']=String(a.tick);for(const f of ['Min','Max','Tick'])$(axis+f).value=config[axis+f];}}
    }
    config[key]=value;
-   if(key==='fitMode'&&value.startsWith('manual-')&& !old.startsWith('manual-'))setManualFromAuto(value);
+   if(key==='fitMode'&&value.startsWith('manual-'))ensureManual(value);
+   if(key==='manualOrigin'&&value&&config.fitMode.startsWith('manual-'))moveManualToOrigin(config.fitMode);
    render();
- }
- function setManualFromAuto(mode){const pts=readPoints().points,aX=configuredAxis('x',pts),aY=configuredAxis('y',pts);if(!aX||!aY)return;
-  const deg=mode==='manual-line'?1:2,us=deg===1?[.15,.85]:[.10,.50,.90],reg=polyFit(pts.filter(p=>!p.outlier),deg);
-  let output=us.map(u=>{const x=aX.min+u*(aX.max-aX.min),y=reg?reg.predict(x):aY.min+u*(aY.max-aY.min);return clamp((y-aY.min)/(aY.max-aY.min),.02,.98);});
-  manual[deg===1?'line':'curve']=output;
  }
  // Excel / Sheets multi-cell clipboard paste directly into any data-column cell.
  // One copied column fills that column; a 2-column block starting at X average
@@ -479,7 +550,7 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
  $('dataBody').addEventListener('click',e=>{const btn=e.target.closest('button[data-delete]');if(!btn)return;const id=Number(btn.dataset.delete);rows=rows.filter(r=>r.id!==id);if(selectedRowId===id)selectedRowId=null;if(!rows.length)rows.push(rowObject());renderTable();render();});
  $('addRow').addEventListener('click',()=>{rows.push(rowObject());renderTable();render();const ins=$('dataBody').lastElementChild.querySelector('input');ins?.focus();});
  $('clearRows').addEventListener('click',()=>{rows=Array.from({length:5},()=>rowObject());selectedRowId=null;renderTable();render();notify('Table cleared. Add your measurements.');});
- $('exampleBtn').addEventListener('click',()=>{config={...defaultConfig};nextId=1;rows=exampleRows.map(rowObject);selectedRowId=null;manual={line:[.2,.8],curve:[.15,.5,.85]};renderTable();syncControls();notify('Example data loaded.');});
+ $('exampleBtn').addEventListener('click',()=>{config={...defaultConfig};nextId=1;rows=exampleRows.map(rowObject);selectedRowId=null;manual={line:[],curve:[],sqrt:[]};renderTable();syncControls();notify('Example data loaded.');});
  $('pasteToggle').addEventListener('click',()=>{$('pastebox').classList.toggle('visible');if($('pastebox').classList.contains('visible'))$('pasteArea').focus();});
  $('pasteCancel').addEventListener('click',()=>{$('pastebox').classList.remove('visible');});
  function parseCSVline(line,delim){const fields=[];let cur='',quote=false;for(let i=0;i<line.length;i++){let ch=line[i];if(ch==='"'){if(quote&&line[i+1]==='"'){cur+='"';i++;}else quote=!quote;}else if(ch===delim&&!quote){fields.push(cur.trim());cur='';}else cur+=ch;}fields.push(cur.trim());return fields;}
@@ -512,8 +583,22 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
  });
  $('graphBox').addEventListener('pointermove',e=>{if(!dragging||dragging.id!==e.pointerId||!renderedAxes)return;
   const svg=$('graphBox').querySelector('svg');if(!svg)return;
-  const v=pointerToSVG(e,svg).y;const norm=clamp((dims.bottom-v)/height,.015,.985),arr=config.fitMode==='manual-line'?manual.line:manual.curve;
-  arr[dragging.index]=norm;render();e.preventDefault();
+  const v=pointerToSVG(e,svg),a=renderedAxes,mode=config.fitMode,arr=manual[manualKey(mode)],j=dragging.index;
+  let x=a.aX.min+(clamp(v.x,dims.left,dims.right)-dims.left)/width*(a.aX.max-a.aX.min);
+  const y=a.aY.min+(dims.bottom-clamp(v.y,dims.top,dims.bottom))/height*(a.aY.max-a.aY.min);
+  if(mode==='manual-sqrt')x=Math.max(0,x);
+  // Interpolation needs distinct X positions (or distinct sqrt(X) for sqrt models).
+  const separation=Math.max((a.aX.max-a.aX.min)*.004,1e-9);
+  if(arr.some((p,k)=>k!==j&&Math.abs(p.x-x)<separation))return;
+  const previous=arr[j];arr[j]={x,y};
+  if(config.manualOrigin){const pts=readPoints().points.filter(p=>!p.outlier);let m=null;
+   if(mode==='manual-line'){if(Math.abs(x)>separation)m=buildModel([0,y/x],0,1,pts);}
+   else if(mode==='manual-sqrt'){if(x>separation)m=rootModel(y/Math.sqrt(x),0,pts);}
+   else {const reference=arr[j===2?0:2];m=originQuadraticFromTwo(arr[j],reference,pts);}
+   if(m)for(const p of arr)p.y=m.predict(p.x);
+   else {arr[j]=previous;return;}
+  }
+  render();e.preventDefault();
  });
  function stopDrag(e){if(dragging&&dragging.id===e.pointerId){try{$('graphBox').releasePointerCapture(e.pointerId);}catch{}dragging=null;}}
  $('graphBox').addEventListener('pointerup',stopDrag);$('graphBox').addEventListener('pointercancel',stopDrag);
@@ -538,13 +623,13 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
    window.print();setTimeout(()=>{if(box.innerHTML===svg)restore();},2000);
    notify('In the print dialog, select “Save as PDF” as the destination.');
  });
- $('saveBtn').addEventListener('click',()=>{const content={format:'scientific-graph-builder',version:4,created:new Date().toISOString(),config,rows:rows.map(r=>({...Object.fromEntries(fieldNames.map(k=>[k,r[k]])),outlier:r.outlier})),manual};
+ $('saveBtn').addEventListener('click',()=>{const content={format:'scientific-graph-builder',version:5,created:new Date().toISOString(),config,rows:rows.map(r=>({...Object.fromEntries(fieldNames.map(k=>[k,r[k]])),outlier:r.outlier})),manual};
   blobSave(new Blob([JSON.stringify(content,null,2)],{type:'application/json'}),filename()+'.graph.json');notify('Editable project downloaded as .graph.json.');
  });
  $('openBtn').addEventListener('click',()=>{$('projectFile').click();});
  $('projectFile').addEventListener('change',async e=>{
   const f=e.target.files?.[0];if(!f)return;try{const project=JSON.parse(await f.text());
-   if(project.format!=='scientific-graph-builder'||![1,2,3,4].includes(project.version)||!Array.isArray(project.rows))throw Error('This is not a supported graph project.');
+   if(project.format!=='scientific-graph-builder'||![1,2,3,4,5].includes(project.version)||!Array.isArray(project.rows))throw Error('This is not a supported graph project.');
    let c={...defaultConfig};if(project.config&&typeof project.config==='object')for(const k of cfgKeys){const v=project.config[k];if(booleanCfg.includes(k)&&typeof v==='boolean')c[k]=v;
      else if(numericCfg.includes(k)&&typeof v==='number'&&ok(v))c[k]=v;
      else if(!booleanCfg.includes(k)&&!numericCfg.includes(k)&&typeof v==='string')c[k]=v.slice(0,500);
@@ -552,8 +637,19 @@ button{background:#fff;color:#18405b;border:1px solid #a8c1d1;border-radius:8px;
    if(!validModes.includes(c.fitMode))c.fitMode='none';
    for(const k of ['pointColor','fitColor','compareColor','errorColor','gridColor'])if(!/^#[\da-f]{6}$/i.test(c[k]))c[k]=defaultConfig[k];
    config=c;nextId=1;selectedRowId=null;rows=project.rows.slice(0,5000).map(rowObject);if(!rows.length)rows=[rowObject()];
-   if(project.manual&&['line','curve'].every(k=>Array.isArray(project.manual[k]))){const m=project.manual;
-     if(m.line.length===2&&m.curve.length===3&&[...m.line,...m.curve].every(v=>typeof v==='number'&&ok(v)&&v>=0&&v<=1))manual={line:m.line.slice(),curve:m.curve.slice()};
+   manual={line:[],curve:[],sqrt:[]};
+   if(project.manual&&typeof project.manual==='object'){
+    const m=project.manual;
+    if(project.version>=5){for(const key of ['line','curve','sqrt']){
+     const required=key==='curve'?3:2;
+     if(Array.isArray(m[key])&&m[key].length===required&&m[key].every(p=>p&&ok(p.x)&&ok(p.y)))manual[key]=m[key].map(p=>({x:p.x,y:p.y}));
+    }}else{
+     // V1–V4 stored manual positions only as fractions of the axis height.
+     const pts=readPoints().points,aX=configuredAxis('x',pts),aY=configuredAxis('y',pts);
+     if(aX&&aY)for(const key of ['line','curve']){const yy=m[key],us=key==='line'?[.15,.85]:[.10,.50,.90];
+      if(Array.isArray(yy)&&yy.length===us.length&&yy.every(v=>typeof v==='number'&&ok(v)&&v>=0&&v<=1))manual[key]=us.map((u,i)=>({x:aX.min+u*(aX.max-aX.min),y:aY.min+yy[i]*(aY.max-aY.min)}));
+     }
+    }
    }
    renderTable();syncControls();notify('Project loaded: '+f.name);
   }catch(err){notify('Cannot open project: '+err.message,true);}e.target.value='';
